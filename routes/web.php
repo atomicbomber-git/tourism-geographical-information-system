@@ -18,3 +18,9 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
+
+Route::redirect('/', '/site/index');
+
+Route::group(['prefix' => '/site', 'as' => 'site.'], function() {
+    Route::get('/index', 'SiteController@index')->name('index');
+});
