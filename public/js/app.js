@@ -14899,7 +14899,7 @@ exports.default = function (input) {
 /***/ (function(module, exports, __webpack_require__) {
 
 __webpack_require__(23);
-module.exports = __webpack_require__(85);
+module.exports = __webpack_require__(88);
 
 
 /***/ }),
@@ -14924,6 +14924,7 @@ Vue.use(__WEBPACK_IMPORTED_MODULE_0_vue2_google_maps__, {
 });
 
 Vue.component('site-map', __webpack_require__(82));
+Vue.component('waypoint-create', __webpack_require__(85));
 
 var app = new Vue({
     el: '#app'
@@ -50721,6 +50722,479 @@ if (false) {
 
 /***/ }),
 /* 85 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+var normalizeComponent = __webpack_require__(2)
+/* script */
+var __vue_script__ = __webpack_require__(86)
+/* template */
+var __vue_template__ = __webpack_require__(87)
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = null
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources/js/components/WaypointCreate.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-560ac508", Component.options)
+  } else {
+    hotAPI.reload("data-v-560ac508", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 86 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_lodash__ = __webpack_require__(25);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_lodash___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_lodash__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_axios__ = __webpack_require__(28);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_axios___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_axios__);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+
+
+
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+    mounted: function mounted() {
+        this.$refs.map.$mapPromise.then(function (map) {
+            map.setOptions({
+                styles: window.gmap_style
+            });
+        });
+    },
+    data: function data() {
+        return {
+            points: window.init_points,
+
+            // Data
+            name: '',
+            error_data: null,
+            latitude: 0.8192948,
+            longitude: 109.4806557
+        };
+    },
+
+
+    computed: {
+        form_data: function form_data() {
+            return {
+                name: this.name,
+                latitude: this.latitude,
+                longitude: this.longitude
+            };
+        }
+    },
+
+    methods: {
+        get: __WEBPACK_IMPORTED_MODULE_0_lodash__["get"],
+        mapClicked: function mapClicked(event) {
+            this.latitude = event.latLng.lat(), this.longitude = event.latLng.lng();
+        },
+        formSubmit: function formSubmit(event) {
+            var _this = this;
+
+            event.preventDefault();
+            __WEBPACK_IMPORTED_MODULE_1_axios___default.a.post('/waypoint/store', this.form_data).then(function (response) {
+                window.location.reload(true);
+            }).catch(function (error) {
+                _this.error_data = error.response.data;
+            });
+        }
+    }
+});
+
+/***/ }),
+/* 87 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", [
+    _c("div", { staticClass: "row" }, [
+      _c("div", { staticClass: "col-4" }, [
+        _c("div", { staticClass: "card" }, [
+          _vm._m(0),
+          _vm._v(" "),
+          _c("div", { staticClass: "card-body" }, [
+            _c("form", { on: { submit: _vm.formSubmit } }, [
+              _c("div", { staticClass: "form-row" }, [
+                _c("div", { staticClass: "form-group col-md-6" }, [
+                  _c("label", { attrs: { for: "latitude" } }, [
+                    _vm._v(" Latitude: ")
+                  ]),
+                  _vm._v(" "),
+                  _c("input", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.latitude,
+                        expression: "latitude"
+                      }
+                    ],
+                    staticClass: "form-control",
+                    class: {
+                      "is-invalid": _vm.get(
+                        this.error_data,
+                        "errors.latitude[0]",
+                        false
+                      )
+                    },
+                    attrs: {
+                      readonly: "",
+                      type: "text",
+                      id: "latitude",
+                      placeholder: "Latitude"
+                    },
+                    domProps: { value: _vm.latitude },
+                    on: {
+                      input: function($event) {
+                        if ($event.target.composing) {
+                          return
+                        }
+                        _vm.latitude = $event.target.value
+                      }
+                    }
+                  }),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "invalid-feedback" }, [
+                    _vm._v(
+                      _vm._s(
+                        _vm.get(this.error_data, "errors.latitude[0]", false)
+                      )
+                    )
+                  ])
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "form-group col-md-6" }, [
+                  _c("label", { attrs: { for: "longitude" } }, [
+                    _vm._v(" Longitude: ")
+                  ]),
+                  _vm._v(" "),
+                  _c("input", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.longitude,
+                        expression: "longitude"
+                      }
+                    ],
+                    staticClass: "form-control",
+                    class: {
+                      "is-invalid": _vm.get(
+                        this.error_data,
+                        "errors.longitude[0]",
+                        false
+                      )
+                    },
+                    attrs: {
+                      readonly: "",
+                      type: "text",
+                      id: "longitude",
+                      placeholder: "Longitude"
+                    },
+                    domProps: { value: _vm.longitude },
+                    on: {
+                      input: function($event) {
+                        if ($event.target.composing) {
+                          return
+                        }
+                        _vm.longitude = $event.target.value
+                      }
+                    }
+                  }),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "invalid-feedback" }, [
+                    _vm._v(
+                      _vm._s(
+                        _vm.get(this.error_data, "errors.longitude[0]", false)
+                      )
+                    )
+                  ])
+                ])
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "form-group" }, [
+                _c("label", { attrs: { for: "name" } }, [
+                  _vm._v(" Nama Waypoint: ")
+                ]),
+                _vm._v(" "),
+                _c("input", {
+                  directives: [
+                    {
+                      name: "model",
+                      rawName: "v-model",
+                      value: _vm.name,
+                      expression: "name"
+                    }
+                  ],
+                  staticClass: "form-control",
+                  class: {
+                    "is-invalid": _vm.get(
+                      this.error_data,
+                      "errors.name[0]",
+                      false
+                    )
+                  },
+                  attrs: {
+                    type: "text",
+                    id: "name",
+                    placeholder: "Nama Waypoint"
+                  },
+                  domProps: { value: _vm.name },
+                  on: {
+                    input: function($event) {
+                      if ($event.target.composing) {
+                        return
+                      }
+                      _vm.name = $event.target.value
+                    }
+                  }
+                }),
+                _vm._v(" "),
+                _c("div", { staticClass: "invalid-feedback" }, [
+                  _vm._v(
+                    _vm._s(_vm.get(this.error_data, "errors.name[0]", false))
+                  )
+                ])
+              ]),
+              _vm._v(" "),
+              _vm._m(1)
+            ])
+          ])
+        ])
+      ]),
+      _vm._v(" "),
+      _c("div", { staticClass: "col-8" }, [
+        _c("div", { staticClass: "card" }, [
+          _vm._m(2),
+          _vm._v(" "),
+          _c(
+            "div",
+            { staticClass: "card-body" },
+            [
+              _c(
+                "gmap-map",
+                {
+                  ref: "map",
+                  staticStyle: { width: "100%", height: "640px" },
+                  attrs: {
+                    center: { lat: 0.8192948, lng: 109.4806557 },
+                    zoom: 16,
+                    "map-type-id": "roadmap"
+                  },
+                  on: { click: _vm.mapClicked }
+                },
+                [
+                  _c("gmap-marker", {
+                    attrs: {
+                      position: { lat: this.latitude, lng: this.longitude },
+                      icon: "/png/location_red.png"
+                    }
+                  }),
+                  _vm._v(" "),
+                  _c(
+                    "div",
+                    _vm._l(_vm.points, function(point) {
+                      return _c("gmap-marker", {
+                        key: point.id,
+                        attrs: {
+                          position: {
+                            lat: point.latitude,
+                            lng: point.longitude
+                          },
+                          label: {
+                            text: point.name,
+                            fontSize: "14pt",
+                            fontWeight: "bold",
+                            color: "black"
+                          }
+                        }
+                      })
+                    })
+                  )
+                ],
+                1
+              )
+            ],
+            1
+          )
+        ])
+      ])
+    ])
+  ])
+}
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "card-header" }, [
+      _c("i", { staticClass: "fa fa-plus" }),
+      _vm._v("\n                    Data Waypoint Baru\n                ")
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "form-group text-right" }, [
+      _c(
+        "button",
+        { staticClass: "btn btn-primary", attrs: { type: "submit" } },
+        [
+          _vm._v(
+            "\n                                Tambahkan Waypoint\n                                "
+          ),
+          _c("i", { staticClass: "fa fa-plus" })
+        ]
+      )
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "card-header" }, [
+      _c("i", { staticClass: "fa fa-map" }),
+      _vm._v("\n                    Peta\n                ")
+    ])
+  }
+]
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-560ac508", module.exports)
+  }
+}
+
+/***/ }),
+/* 88 */
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin

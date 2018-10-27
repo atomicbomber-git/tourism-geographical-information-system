@@ -7,6 +7,17 @@
         Kelola Waypoint
     </h1>
 
+    <div class="row my-4">
+        <div class="col">
+            <a href="{{ route('waypoint.create') }}" class="btn btn-dark">
+                Tambahkan Waypoint Baru
+                <i class="fa fa-plus"></i>
+            </a>
+        </div>
+        <div class="col-2"></div>
+        <div class="col"></div>
+    </div>
+
     @include('shared.message', ['session_key' => 'message.success', 'state' => 'success'])
 
     <div class="card">

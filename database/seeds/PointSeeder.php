@@ -11,7 +11,7 @@ class PointSeeder extends Seeder
      */
     public function run()
     {
-        factory(App\Point::class, 25)->create(['type' => 'WAYPOINT']);
-        factory(App\Point::class, 5)->create(['type' => 'SITE']);
+        factory(App\Point::class, 10)->create(['type' => 'WAYPOINT']);
+        factory(App\Point::class, 10)->create(['type' => 'SITE']);
     }
 }

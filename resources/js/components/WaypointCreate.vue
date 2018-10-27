@@ -1,0 +1,148 @@
+<template>
+    <div>
+        <div class="row">
+            <div class="col-4">
+                <div class="card">
+                    <div class="card-header">
+                        <i class="fa fa-plus"></i>
+                        Data Waypoint Baru
+                    </div>
+                    <div class="card-body">
+                        <form @submit="formSubmit">
+                            <div class="form-row">
+                                <div class='form-group col-md-6'>
+                                    <label for='latitude'> Latitude: </label>
+                                    <input
+                                        readonly
+                                        v-model='latitude'
+                                        class='form-control'
+                                        :class="{'is-invalid': get(this.error_data, 'errors.latitude[0]', false)}"
+                                        type='text' id='latitude' placeholder='Latitude'>
+                                    <div class='invalid-feedback'>{{ get(this.error_data, 'errors.latitude[0]', false) }}</div>
+                                </div>
+
+                                <div class='form-group col-md-6'>
+                                    <label for='longitude'> Longitude: </label>
+                                    <input
+                                        readonly
+                                        v-model='longitude'
+                                        class='form-control'
+                                        :class="{'is-invalid': get(this.error_data, 'errors.longitude[0]', false)}"
+                                        type='text' id='longitude' placeholder='Longitude'>
+                                    <div class='invalid-feedback'>{{ get(this.error_data, 'errors.longitude[0]', false) }}</div>
+                                </div>
+                            </div>
+
+                            <div class='form-group'>
+                                <label for='name'> Nama Waypoint: </label>
+                                <input
+                                    v-model='name'
+                                    class='form-control'
+                                    :class="{'is-invalid': get(this.error_data, 'errors.name[0]', false)}"
+                                    type='text' id='name' placeholder='Nama Waypoint'>
+                                <div class='invalid-feedback'>{{ get(this.error_data, 'errors.name[0]', false) }}</div>
+                            </div>
+
+                            <div class="form-group text-right">
+                                <button class="btn btn-primary" type="submit">
+                                    Tambahkan Waypoint
+                                    <i class="fa fa-plus"></i>
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="col-8">
+                <div class="card">
+                    <div class="card-header">
+                        <i class="fa fa-map"></i>
+                        Peta
+                    </div>
+                    <div class="card-body">
+                        <gmap-map
+                            ref="map"
+                            @click="mapClicked"
+                            :center="{lat: 0.8192948, lng: 109.4806557}"
+                            :zoom="16"
+                            style="width: 100%; height: 640px"
+                            map-type-id="roadmap">
+
+                            <gmap-marker
+                                :position="{lat: this.latitude, lng: this.longitude}"
+                                icon="/png/location_red.png"
+                                />
+
+                            <div>
+                                <gmap-marker
+                                    v-for="point in points"
+                                    :key="point.id"
+                                    :position="{lat: point.latitude, lng: point.longitude}"
+                                    :label="{ text: point.name, fontSize: '14pt', fontWeight: 'bold', color: 'black'}"
+                                    />
+                            </div>
+
+                        </gmap-map>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</template>
+
+<script>
+
+    import {get} from 'lodash'
+    import axios from 'axios'
+
+    export default {
+
+        mounted() {
+            this.$refs.map.$mapPromise.then(map => {
+                map.setOptions({
+                    styles: window.gmap_style
+                });
+            })
+        },
+
+        data() {
+            return {
+                points: window.init_points,
+
+                // Data
+                name: '',
+                error_data: null,
+                latitude: 0.8192948,
+                longitude: 109.4806557
+            }
+        },
+
+        computed: {
+            form_data() {
+                return {
+                    name: this.name,
+                    latitude: this.latitude,
+                    longitude: this.longitude
+                }
+            }
+        },
+
+        methods: {
+            get: get,
+            mapClicked(event) {
+                this.latitude = event.latLng.lat(),
+                this.longitude = event.latLng.lng()
+            },
+            formSubmit(event) {
+                event.preventDefault()
+                axios.post('/waypoint/store', this.form_data)
+                    .then(response => {
+                        window.location.reload(true)
+                    })
+                    .catch(error => {
+                        this.error_data = error.response.data
+                    })
+            }
+        }
+    }
+</script>

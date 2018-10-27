@@ -19,6 +19,33 @@ class WaypointController extends Controller
         return view('waypoint.index', compact('points'));
     }
 
+    public function create()
+    {
+        $points = Point::query()
+            ->select('id', 'name', 'latitude', 'longitude')
+            ->where('type', 'WAYPOINT')
+            ->get();
+
+        return view('waypoint.create', compact('points'));
+    }
+
+    public function store()
+    {
+        $data = $this->validate(request(), [
+            'name' => 'required|string',
+            'latitude' => 'required|numeric',
+            'longitude' => 'required|numeric',
+        ]);
+
+        Point::create(array_merge($data, [
+            'type' => 'WAYPOINT'
+        ]));
+
+        return [
+            'status' => 'success',
+        ];
+    }
+
     public function delete(Point $waypoint)
     {
         DB::transaction(function() use($waypoint) {

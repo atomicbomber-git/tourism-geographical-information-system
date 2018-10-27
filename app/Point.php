@@ -12,7 +12,7 @@ class Point extends Model
     ];
 
     public $fillable = [
-        'name', 'latitude', 'longitude', 'waypoint'
+        'name', 'latitude', 'longitude', 'waypoint', 'type'
     ];
 
     public function paths_from()
