@@ -51667,13 +51667,17 @@ var render = function() {
                     }
                   },
                   _vm._l(_vm.end_points, function(point) {
-                    return _c("option", { key: point.id }, [
-                      _vm._v(
-                        "\n                                    " +
-                          _vm._s(point.name) +
-                          "\n                                "
-                      )
-                    ])
+                    return _c(
+                      "option",
+                      { key: point.id, domProps: { value: point.id } },
+                      [
+                        _vm._v(
+                          "\n                                    " +
+                            _vm._s(point.name) +
+                            "\n                                "
+                        )
+                      ]
+                    )
                   })
                 )
               ]),

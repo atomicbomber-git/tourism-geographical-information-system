@@ -58,7 +58,7 @@
                             <div class="form-group">
                                 <label> Titik Tujuan: </label>
                                 <select class="form-control" v-model="end_point_id">
-                                    <option v-for="point in end_points" :key="point.id">
+                                    <option v-for="point in end_points" :key="point.id" :value="point.id">
                                         {{ point.name }}
                                     </option>
                                 </select>
