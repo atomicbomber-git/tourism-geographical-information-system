@@ -23,7 +23,7 @@
                                 :key="point.id">
                                 <GmapMarker
                                     :position="{lat: point.latitude, lng: point.longitude}"
-                                    :label="{ text: point.name, fontSize: '14pt', fontWeight: 'bold', color: 'white'}"
+                                    :label="{ text: point.name, fontSize: '14pt', fontWeight: 'bold', color: 'black'}"
                                     >
                                 </GmapMarker>
 
