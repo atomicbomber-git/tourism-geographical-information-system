@@ -30,8 +30,8 @@
                 <thead class="thead-dark">
                     <tr>
                         <th> No. </th>
-                        <th> A </th>
-                        <th> B </th>
+                        <th> Asal </th>
+                        <th> Tujuan </th>
                         <th> Kendali </th>
                     </tr>
                 </thead>

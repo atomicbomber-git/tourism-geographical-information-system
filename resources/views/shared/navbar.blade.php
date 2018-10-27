@@ -5,26 +5,45 @@
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+
             <div class="navbar-nav">
-                <li class='nav-item {{ Route::is('waypoint.*') ? 'active' : '' }}'>
-                    <a class='nav-link' href='{{ route('waypoint.index') }}'>
+
+                <li class='nav-item dropdown {{ Route::is('waypoint.*') ? 'active' : '' }}'>
+                    <a
+                        class='nav-link dropdown-toggle' href='#' id='waypoint' role='button'
+                        data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>
                         <i class='fa fa-road'></i>
                         Waypoint
                     </a>
+                    <div class='dropdown-menu' aria-labelledby='waypoint'>
+                        <a class='dropdown-item' href='{{ route('waypoint.index') }}'> Daftar Waypoint </a>
+                        <a class='dropdown-item' href='{{ route('waypoint.create') }}'> Tambah Waypoint </a>
+                    </div>
                 </li>
 
-                <li class='nav-item {{ Route::is('site.*') ? 'active' : '' }}'>
-                    <a class='nav-link' href='{{ route('site.map') }}'>
-                        <i class='fa fa-tree'></i>
-                        Situs
-                    </a>
-                </li>
-
-                <li class='nav-item {{ Route::is('path.*') ? 'active' : '' }}'>
-                    <a class='nav-link' href='{{ route('path.index') }}'>
+                <li class='nav-item dropdown {{ Route::is('path.*') ? 'active' : '' }}'>
+                    <a
+                        class='nav-link dropdown-toggle' href='#' id='path' role='button'
+                        data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>
                         <i class='fa fa-arrow-circle-o-right'></i>
                         Jalur
                     </a>
+                    <div class='dropdown-menu' aria-labelledby='path'>
+                        <a class='dropdown-item' href='{{ route('path.index') }}'> Daftar Jalur </a>
+                        <a class='dropdown-item' href='{{ route('path.create') }}'> Tambah Jalur </a>
+                    </div>
+                </li>
+
+                <li class='nav-item dropdown {{ Route::is('site.*') ? 'active' : '' }}'>
+                    <a
+                        class='nav-link dropdown-toggle' href='#' id='site' role='button'
+                        data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>
+                        <i class='fa fa-tree'></i>
+                        Situs
+                    </a>
+                    <div class='dropdown-menu' aria-labelledby='site'>
+                        <a class='dropdown-item' href='{{ route('site.map') }}'> Peta Rute </a>
+                    </div>
                 </li>
             </div>
         </div>

@@ -24,7 +24,9 @@ class WaypointController extends Controller
         $points = Point::query()
             ->select('id', 'name', 'latitude', 'longitude')
             ->where('type', 'WAYPOINT')
-            ->get();
+            ->with('paths_from:point_a_id,point_b_id')
+            ->get()
+            ->keyBy('id');
 
         return view('waypoint.create', compact('points'));
     }

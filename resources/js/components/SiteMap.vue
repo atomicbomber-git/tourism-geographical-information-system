@@ -45,7 +45,7 @@
                 <div class="card mb-4">
                     <div class="card-body">
                         <div class="form-group">
-                            <label> Lokasi Awal: </label>
+                            <label> Lokasi Asal: </label>
                             <select @change="update_track" v-model="start_point" class="form-control form-control-sm">
                                 <option v-for="point in points" :key="point.id" :value="point.id">
                                     {{ point.name }}

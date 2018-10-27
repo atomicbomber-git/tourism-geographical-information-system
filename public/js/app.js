@@ -50609,7 +50609,7 @@ var render = function() {
         _c("div", { staticClass: "card mb-4" }, [
           _c("div", { staticClass: "card-body" }, [
             _c("div", { staticClass: "form-group" }, [
-              _c("label", [_vm._v(" Lokasi Awal: ")]),
+              _c("label", [_vm._v(" Lokasi Asal: ")]),
               _vm._v(" "),
               _c(
                 "select",
@@ -50910,6 +50910,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
 
 
 
@@ -51010,28 +51014,46 @@ var render = function() {
                       })
                     : _vm._e(),
                   _vm._v(" "),
-                  _c(
-                    "div",
-                    _vm._l(_vm.points, function(point) {
-                      return _c("gmap-marker", {
-                        key: point.id,
-                        attrs: {
-                          position: {
-                            lat: point.latitude,
-                            lng: point.longitude
-                          },
-                          label: {
-                            text: point.name,
-                            fontSize: "14pt",
-                            fontWeight: "bold",
-                            color: "black"
+                  _vm._l(_vm.points, function(point) {
+                    return _c(
+                      "div",
+                      { key: point.id },
+                      [
+                        _c("gmap-marker", {
+                          attrs: {
+                            position: {
+                              lat: point.latitude,
+                              lng: point.longitude
+                            },
+                            label: {
+                              text: point.name,
+                              fontSize: "14pt",
+                              fontWeight: "bold",
+                              color: "black"
+                            }
                           }
-                        }
-                      })
-                    })
-                  )
+                        }),
+                        _vm._v(" "),
+                        _vm._l(point.paths_from, function(path) {
+                          return _c("gmap-polyline", {
+                            key: path.point_b_id,
+                            attrs: {
+                              path: [
+                                { lat: point.latitude, lng: point.longitude },
+                                {
+                                  lat: _vm.points[path.point_b_id].latitude,
+                                  lng: _vm.points[path.point_b_id].longitude
+                                }
+                              ]
+                            }
+                          })
+                        })
+                      ],
+                      2
+                    )
+                  })
                 ],
-                1
+                2
               )
             ],
             1
@@ -51567,7 +51589,7 @@ var render = function() {
           _c("div", { staticClass: "card-body" }, [
             _c("form", { on: { submit: _vm.submitForm } }, [
               _c("div", { staticClass: "form-group" }, [
-                _c("label", [_vm._v(" Titik Awal: ")]),
+                _c("label", [_vm._v(" Titik Asal: ")]),
                 _vm._v(" "),
                 _c(
                   "select",

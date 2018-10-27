@@ -22,12 +22,16 @@
                                 icon="/png/location_red.png"
                                 />
 
-                            <div>
+                            <div v-for="point in points" :key="point.id">
                                 <gmap-marker
-                                    v-for="point in points"
-                                    :key="point.id"
                                     :position="{lat: point.latitude, lng: point.longitude}"
                                     :label="{ text: point.name, fontSize: '14pt', fontWeight: 'bold', color: 'black'}"
+                                    />
+
+                                <gmap-polyline
+                                    v-for="path in point.paths_from"
+                                    :key="path.point_b_id"
+                                    :path="[{lat: point.latitude, lng: point.longitude}, {lat: points[path.point_b_id].latitude, lng: points[path.point_b_id].longitude }]"
                                     />
                             </div>
 

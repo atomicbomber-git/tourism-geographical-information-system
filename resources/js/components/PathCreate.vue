@@ -48,7 +48,7 @@
                     <div class="card-body">
                         <form @submit="submitForm">
                             <div class="form-group">
-                                <label> Titik Awal: </label>
+                                <label> Titik Asal: </label>
                                 <select class="form-control" v-model="start_point_id">
                                     <option v-for="point in points" :key="point.id" :value="point.id">
                                         {{ point.name }}
