@@ -11,7 +11,7 @@ Vue.use(VueGoogleMaps, {
     },
 })
 
-Vue.component('site-index', require('./components/SiteIndex.vue'));
+Vue.component('site-map', require('./components/SiteMap.vue'));
 
 const app = new Vue({
     el: '#app'

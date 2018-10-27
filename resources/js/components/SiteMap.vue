@@ -4,8 +4,8 @@
             <div class="col-8">
                 <div class="card">
                     <div class="card-header">
-                        <i class="fa fa-tree"></i>
-                        Kelola Situs Pariwisata
+                        <i class="fa fa-map"></i>
+                        Peta Situs Pariwisata
                     </div>
                     
                     <div class="card-body">

@@ -8,7 +8,7 @@ use App\Path;
 
 class SiteController extends Controller
 {
-    public function index()
+    public function map()
     {
         $points = Point::query()
             ->select('id', 'name', 'latitude', 'longitude', 'type')

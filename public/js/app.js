@@ -14923,7 +14923,7 @@ Vue.use(__WEBPACK_IMPORTED_MODULE_0_vue2_google_maps__, {
     }
 });
 
-Vue.component('site-index', __webpack_require__(82));
+Vue.component('site-map', __webpack_require__(82));
 
 var app = new Vue({
     el: '#app'
@@ -50252,7 +50252,7 @@ var Component = normalizeComponent(
   __vue_scopeId__,
   __vue_module_identifier__
 )
-Component.options.__file = "resources/js/components/SiteIndex.vue"
+Component.options.__file = "resources/js/components/SiteMap.vue"
 
 /* hot reload */
 if (false) {(function () {
@@ -50261,9 +50261,9 @@ if (false) {(function () {
   if (!hotAPI.compatible) return
   module.hot.accept()
   if (!module.hot.data) {
-    hotAPI.createRecord("data-v-cb42cb20", Component.options)
+    hotAPI.createRecord("data-v-a76be90c", Component.options)
   } else {
-    hotAPI.reload("data-v-cb42cb20", Component.options)
+    hotAPI.reload("data-v-a76be90c", Component.options)
   }
   module.hot.dispose(function (data) {
     disposed = true
@@ -50696,8 +50696,8 @@ var staticRenderFns = [
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
     return _c("div", { staticClass: "card-header" }, [
-      _c("i", { staticClass: "fa fa-tree" }),
-      _vm._v("\n                    Kelola Situs Pariwisata\n                ")
+      _c("i", { staticClass: "fa fa-map" }),
+      _vm._v("\n                    Peta Situs Pariwisata\n                ")
     ])
   },
   function() {
@@ -50715,7 +50715,7 @@ module.exports = { render: render, staticRenderFns: staticRenderFns }
 if (false) {
   module.hot.accept()
   if (module.hot.data) {
-    require("vue-hot-reload-api")      .rerender("data-v-cb42cb20", module.exports)
+    require("vue-hot-reload-api")      .rerender("data-v-a76be90c", module.exports)
   }
 }
 

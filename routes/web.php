@@ -19,8 +19,13 @@ Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
 
-Route::redirect('/', '/site/index');
+Route::redirect('/', '/waypoint/index');
 
 Route::group(['prefix' => '/site', 'as' => 'site.'], function() {
-    Route::get('/index', 'SiteController@index')->name('index');
+    Route::get('/map', 'SiteController@map')->name('map');
+});
+
+Route::group(['prefix' => '/waypoint', 'as' => 'waypoint.'], function() {
+    Route::get('/index', 'WaypointController@index')->name('index');
+    Route::delete('/delete/{waypoint}', 'WaypointController@delete')->name('delete');
 });
