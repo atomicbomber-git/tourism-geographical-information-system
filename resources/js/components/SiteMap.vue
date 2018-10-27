@@ -9,10 +9,13 @@
                     </div>
                     
                     <div class="card-body">
-                        <GmapMap
-                            :center="{lat: 0.8192948, lng: 109.4806557}"
-                            :zoom="12"
-                            map-type-id="hybrid"
+                        <gmap-map
+                            :center="{lat: map_center.lat, lng: map_center.lng}"
+                            :zoom="map_zoom"
+                            :options="{ styles: map_styles }"
+                            @zoom_changed="saveZoom"
+                            @center_changed="saveCenter"
+                            ref="map"
                             style="width: 100%; height: 640px">
 
                             <div
@@ -33,7 +36,7 @@
                                 </gmap-polyline>
                             </div>
 
-                        </GmapMap>
+                        </gmap-map>
                     </div>
                 </div>
             </div>
@@ -82,19 +85,29 @@
 <script>
     export default {
         mounted() {
+            // Store map object ref
+            this.$refs.map.$mapPromise.then(map => {
+                this.map = map
+            })
 
             this.start_point = 1
             this.finish_point = 6
-
 
             this.dijkstra(this.points[this.start_point], this.points[this.end_point])
         },
 
         methods: {
+            saveZoom() {
+                window.localStorage.setItem('gmap_zoom', this.map.getZoom())
+            },
+
+            saveCenter() {
+                window.localStorage.setItem('gmap_center_lat', this.map.getCenter().lat())
+                window.localStorage.setItem('gmap_center_lng', this.map.getCenter().lng())
+            },
+
             update_track()
             {
-                console.log("Test")
-
                 this.points = _.mapValues(this.points, point => {
                     return {
                         ...point,
@@ -110,12 +123,9 @@
             },
 
             dijkstra(start, finish) {
-
                 // Reset
-
                 start.tentative_dist = 0
                 start.visited = true
-                console.log(this.points[1].visited)
                 let current_point = start
 
                 while (true) {
@@ -133,8 +143,10 @@
                     }
                 
                     visitable_paths.forEach(path => {
-                        if (current_point.tentative_dist + path.distance < this.points[path.id].tentative_dist) {
-                            this.points[path.id].tentative_dist = current_point.tentative_dist + path.distance
+                        if (current_point.tentative_dist + this.haversineDist(this.points[path.id].latitude, this.points[path.id].longitude, current_point.latitude, current_point.longitude) < this.points[path.id].tentative_dist) {
+                            this.points[path.id].tentative_dist =
+                                current_point.tentative_dist +
+                                this.haversineDist(this.points[path.id].latitude, this.points[path.id].longitude, current_point.latitude, current_point.longitude)
                             this.points[path.id].prev_point = current_point.id
                             // console.log(`Setting ${this.points[path.id].name}'s distance to ${this.points[path.id].tentative_dist}`)
                         }
@@ -167,25 +179,45 @@
             },
 
             line_color(point_a, point_b) {
-                if (point_a.is_in_track && point_b.is_in_track) {
-                    return 'red'
-                }
-
+                if (point_a.is_in_track && point_b.is_in_track) { return 'red' }
                 return 'black'
             },
 
             icon(point_type) {
-                if (point_type == "SITE") {
-                    return "/png/marker_green.png"
-                }
-
+                if (point_type == "SITE") { return "/png/marker_green.png" }
                 return "/png/marker_red.png"
+            },
+
+            haversineDist(lat1,lon1,lat2,lon2) {
+                let R = 6371 // Radius of the earth in km
+                let dLat = this.deg2rad(lat2-lat1)  // deg2rad below
+                let dLon = this.deg2rad(lon2-lon1) 
+                let a = 
+                    Math.sin(dLat/2) * Math.sin(dLat/2) +
+                    Math.cos(this.deg2rad(lat1)) * Math.cos(this.deg2rad(lat2)) * 
+                    Math.sin(dLon/2) * Math.sin(dLon/2); 
+                let c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)); 
+                let d = R * c;
+                return d;
+            },
+
+            deg2rad(deg) {
+                return deg * (Math.PI/180)
             }
         },
 
         data() {
             return {
-                points: _.mapValues(window.init_points, (point) => {
+
+                map_zoom: parseInt(localStorage.gmap_zoom) || 12,
+                map_center: {
+                    lat: parseFloat(localStorage.gmap_center_lat) || 0.8192948,
+                    lng: parseFloat(localStorage.gmap_center_lng) || 109.4806557
+                },
+
+                map_styles: window.gmap_styles,
+
+                points: _.mapValues(window.init_points, point => {
                     return {
                         ...point,
                         // For Dijkstra purpose

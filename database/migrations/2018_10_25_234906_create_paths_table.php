@@ -19,7 +19,6 @@ class CreatePathsTable extends Migration
             $table->integer('point_a_id')->unsigned();
             $table->integer('point_b_id')->unsigned();
             $table->unique(['point_a_id', 'point_b_id']);
-            $table->double('distance');
 
             $table->foreign('point_a_id')->references('id')->on('points');
             $table->foreign('point_b_id')->references('id')->on('points');

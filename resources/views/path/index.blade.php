@@ -18,6 +18,8 @@
         <div class="col-2"></div>
     </div>
 
+    @include('shared.message', ['session_key' => 'message.success', 'state' => 'success'])
+
     <div class="card">
         <div class="card-header">
             <i class="fa fa-arrow-circle-o-right"></i>
@@ -30,7 +32,7 @@
                         <th> No. </th>
                         <th> A </th>
                         <th> B </th>
-                        <th> Action </th>
+                        <th> Kendali </th>
                     </tr>
                 </thead>
                 <tbody>
@@ -39,7 +41,15 @@
                         <td> {{ $loop->iteration }}. </td>
                         <td> {{ $path->point_from->name }} </td>
                         <td> {{ $path->point_to->name }} </td>
-                        <td>  </td>
+                        <td>
+                            <form method="POST" action="{{ route('path.delete', $path) }}" class="d-inline-block">
+                                @method('DELETE')
+                                @csrf
+                                <button type="submit" class="btn btn-danger btn-sm">
+                                    <i class="fa fa-trash"></i>
+                                </button>
+                            </form>
+                        </td>
                     </tr>
                     @endforeach
                 </tbody>

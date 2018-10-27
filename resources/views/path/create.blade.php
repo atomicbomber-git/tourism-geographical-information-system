@@ -14,5 +14,6 @@
 
 @javascript('gmap_styles', config('gmap_style'))
 @javascript('init_points', $points)
+@javascript('gmap_zoom', session('gmap_zoom') ?? 11)
 
 @endsection

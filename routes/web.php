@@ -35,4 +35,6 @@ Route::group(['prefix' => '/waypoint', 'as' => 'waypoint.'], function() {
 Route::group(['prefix' => '/path', 'as' => 'path.'], function() {
     Route::get('/index', 'PathController@index')->name('index');
     Route::get('/create', 'PathController@create')->name('create');
+    Route::post('/store', 'PathController@store')->name('store');
+    Route::delete('/delete/{path}', 'PathController@delete')->name('delete');
 });

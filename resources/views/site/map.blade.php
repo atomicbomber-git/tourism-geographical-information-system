@@ -12,6 +12,7 @@
     </div>
 </div>
 
+@javascript('gmap_styles', config('gmap_style'))
 @javascript('init_points', $points)
 
 @endsection

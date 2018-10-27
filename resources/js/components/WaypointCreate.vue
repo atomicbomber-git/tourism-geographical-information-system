@@ -11,12 +11,13 @@
                         <gmap-map
                             ref="map"
                             @click="mapClicked"
-                            :center="{lat: 0.8192948, lng: 109.4806557}"
-                            :zoom="16"
+                            :center="{lat: mapCenter.lat, lng: mapCenter.lng}"
+                            :zoom="mapZoom"
                             style="width: 100%; height: 640px"
                             map-type-id="roadmap">
 
                             <gmap-marker
+                                v-if="this.latitude && this.longitude"
                                 :position="{lat: this.latitude, lng: this.longitude}"
                                 icon="/png/location_red.png"
                                 />
@@ -112,8 +113,14 @@
                 // Data
                 name: '',
                 error_data: null,
-                latitude: 0.8192948,
-                longitude: 109.4806557
+                latitude: null,
+                longitude: null,
+
+                mapZoom: parseInt(localStorage.gmap_zoom) || 12,
+                mapCenter: {
+                    lat: parseFloat(localStorage.gmap_center_lat) || 0.8192948,
+                    lng: parseFloat(localStorage.gmap_center_lng) || 109.4806557
+                },
             }
         },
 

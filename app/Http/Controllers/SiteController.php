@@ -12,8 +12,8 @@ class SiteController extends Controller
     {
         $points = Point::query()
             ->select('id', 'name', 'latitude', 'longitude', 'type')
-            ->with('paths_to:point_a_id,point_b_id,distance')
-            ->with('paths_from:point_a_id,point_b_id,distance')
+            ->with('paths_to:point_a_id,point_b_id')
+            ->with('paths_from:point_a_id,point_b_id')
             ->get()
             ->map(function ($point) {
                 
@@ -22,14 +22,12 @@ class SiteController extends Controller
                 $point->paths_to->each(function ($path) use($point) {
                     $point->paths->push([
                         'id' => $path->point_a_id,
-                        'distance' => $path->distance
                     ]);
                 });
 
                 $point->paths_from->each(function ($path) use($point) {
                     $point->paths->push([
                         'id' => $path->point_b_id,
-                        'distance' => $path->distance
                     ]);
                 });
 
@@ -40,6 +38,6 @@ class SiteController extends Controller
             })
             ->keyBy('id');
 
-        return view('site.index', compact('points'));
+        return view('site.map', compact('points'));
     }
 }
