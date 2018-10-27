@@ -1,6 +1,39 @@
 <template>
     <div>
         <div class="row">
+            <div class="col-8">
+                <div class="card">
+                    <div class="card-header">
+                        <i class="fa fa-map"></i>
+                        Peta
+                    </div>
+                    <div class="card-body">
+                        <gmap-map
+                            ref="map"
+                            @click="mapClicked"
+                            :center="{lat: 0.8192948, lng: 109.4806557}"
+                            :zoom="16"
+                            style="width: 100%; height: 640px"
+                            map-type-id="roadmap">
+
+                            <gmap-marker
+                                :position="{lat: this.latitude, lng: this.longitude}"
+                                icon="/png/location_red.png"
+                                />
+
+                            <div>
+                                <gmap-marker
+                                    v-for="point in points"
+                                    :key="point.id"
+                                    :position="{lat: point.latitude, lng: point.longitude}"
+                                    :label="{ text: point.name, fontSize: '14pt', fontWeight: 'bold', color: 'black'}"
+                                    />
+                            </div>
+
+                        </gmap-map>
+                    </div>
+                </div>
+            </div>
             <div class="col-4">
                 <div class="card">
                     <div class="card-header">
@@ -50,39 +83,6 @@
                                 </button>
                             </div>
                         </form>
-                    </div>
-                </div>
-            </div>
-            <div class="col-8">
-                <div class="card">
-                    <div class="card-header">
-                        <i class="fa fa-map"></i>
-                        Peta
-                    </div>
-                    <div class="card-body">
-                        <gmap-map
-                            ref="map"
-                            @click="mapClicked"
-                            :center="{lat: 0.8192948, lng: 109.4806557}"
-                            :zoom="16"
-                            style="width: 100%; height: 640px"
-                            map-type-id="roadmap">
-
-                            <gmap-marker
-                                :position="{lat: this.latitude, lng: this.longitude}"
-                                icon="/png/location_red.png"
-                                />
-
-                            <div>
-                                <gmap-marker
-                                    v-for="point in points"
-                                    :key="point.id"
-                                    :position="{lat: point.latitude, lng: point.longitude}"
-                                    :label="{ text: point.name, fontSize: '14pt', fontWeight: 'bold', color: 'black'}"
-                                    />
-                            </div>
-
-                        </gmap-map>
                     </div>
                 </div>
             </div>

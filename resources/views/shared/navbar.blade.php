@@ -19,6 +19,13 @@
                         Situs
                     </a>
                 </li>
+
+                <li class='nav-item {{ Route::is('path.*') ? 'active' : '' }}'>
+                    <a class='nav-link' href='{{ route('path.index') }}'>
+                        <i class='fa fa-arrow-circle-o-right'></i>
+                        Jalur
+                    </a>
+                </li>
             </div>
         </div>
     </div>

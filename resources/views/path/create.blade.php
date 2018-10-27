@@ -1,0 +1,18 @@
+@extends('shared.layout')
+@section('title', 'Tambah Jalur')
+@section('content')
+<div class="container mt-5">
+    <h1 class="mb-5">
+        <i class="fa fa-plus"></i>
+        Tambah Jalur
+    </h1>
+
+    <div id="app">
+        <path-create/>
+    </div>
+</div>
+
+@javascript('gmap_styles', config('gmap_style'))
+@javascript('init_points', $points)
+
+@endsection
