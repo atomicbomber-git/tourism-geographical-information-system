@@ -24,7 +24,8 @@ class SiteController extends Controller
         $points = Point::query()
             ->select('id', 'name', 'latitude', 'longitude', 'type')
             ->with('paths_from:point_a_id,point_b_id')
-            ->get();
+            ->get()
+            ->keyBy('id');
 
         return view('site.create', compact('points'));
     }
