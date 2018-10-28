@@ -151,7 +151,6 @@
                         }
                     })
                     
-                    console.log(point.name)
                     point.visited = true
                 }
 

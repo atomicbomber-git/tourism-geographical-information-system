@@ -50434,7 +50434,6 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
                     }
                 });
 
-                console.log(point.name);
                 point.visited = true;
             };
 
