@@ -51470,9 +51470,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     computed: {
         form_data: function form_data() {
             return {
-                name: this.waypoint.name,
-                latitude: this.waypoint.latitude,
-                longitude: this.waypoint.longitude
+                name: this.points[this.waypoint.id].name,
+                latitude: this.points[this.waypoint.id].latitude,
+                longitude: this.points[this.waypoint.id].longitude
             };
         }
     },
@@ -51480,7 +51480,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     methods: {
         get: __WEBPACK_IMPORTED_MODULE_0_lodash__["get"],
         mapClicked: function mapClicked(event) {
-            this.waypoint.latitude = event.latLng.lat(), this.waypoint.longitude = event.latLng.lng();
+            this.points[this.waypoint.id].latitude = event.latLng.lat(), this.points[this.waypoint.id].longitude = event.latLng.lng();
         },
         formSubmit: function formSubmit(event) {
             var _this = this;
@@ -51614,8 +51614,8 @@ var render = function() {
                       {
                         name: "model",
                         rawName: "v-model",
-                        value: _vm.waypoint.latitude,
-                        expression: "waypoint.latitude"
+                        value: _vm.points[_vm.waypoint.id].latitude,
+                        expression: "points[waypoint.id].latitude"
                       }
                     ],
                     staticClass: "form-control",
@@ -51632,13 +51632,17 @@ var render = function() {
                       id: "latitude",
                       placeholder: "Latitude"
                     },
-                    domProps: { value: _vm.waypoint.latitude },
+                    domProps: { value: _vm.points[_vm.waypoint.id].latitude },
                     on: {
                       input: function($event) {
                         if ($event.target.composing) {
                           return
                         }
-                        _vm.$set(_vm.waypoint, "latitude", $event.target.value)
+                        _vm.$set(
+                          _vm.points[_vm.waypoint.id],
+                          "latitude",
+                          $event.target.value
+                        )
                       }
                     }
                   }),
@@ -51662,8 +51666,8 @@ var render = function() {
                       {
                         name: "model",
                         rawName: "v-model",
-                        value: _vm.waypoint.longitude,
-                        expression: "waypoint.longitude"
+                        value: _vm.points[_vm.waypoint.id].longitude,
+                        expression: "points[waypoint.id].longitude"
                       }
                     ],
                     staticClass: "form-control",
@@ -51680,13 +51684,17 @@ var render = function() {
                       id: "longitude",
                       placeholder: "Longitude"
                     },
-                    domProps: { value: _vm.waypoint.longitude },
+                    domProps: { value: _vm.points[_vm.waypoint.id].longitude },
                     on: {
                       input: function($event) {
                         if ($event.target.composing) {
                           return
                         }
-                        _vm.$set(_vm.waypoint, "longitude", $event.target.value)
+                        _vm.$set(
+                          _vm.points[_vm.waypoint.id],
+                          "longitude",
+                          $event.target.value
+                        )
                       }
                     }
                   }),
@@ -51711,8 +51719,8 @@ var render = function() {
                     {
                       name: "model",
                       rawName: "v-model",
-                      value: _vm.waypoint.name,
-                      expression: "waypoint.name"
+                      value: _vm.points[_vm.waypoint.id].name,
+                      expression: "points[waypoint.id].name"
                     }
                   ],
                   staticClass: "form-control",
@@ -51728,13 +51736,17 @@ var render = function() {
                     id: "name",
                     placeholder: "Nama Waypoint"
                   },
-                  domProps: { value: _vm.waypoint.name },
+                  domProps: { value: _vm.points[_vm.waypoint.id].name },
                   on: {
                     input: function($event) {
                       if ($event.target.composing) {
                         return
                       }
-                      _vm.$set(_vm.waypoint, "name", $event.target.value)
+                      _vm.$set(
+                        _vm.points[_vm.waypoint.id],
+                        "name",
+                        $event.target.value
+                      )
                     }
                   }
                 }),

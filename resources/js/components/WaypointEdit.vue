@@ -53,7 +53,7 @@
                                     <label for='latitude'> Latitude: </label>
                                     <input
                                         readonly
-                                        v-model='waypoint.latitude'
+                                        v-model='points[waypoint.id].latitude'
                                         class='form-control'
                                         :class="{'is-invalid': get(this.error_data, 'errors.latitude[0]', false)}"
                                         type='text' id='latitude' placeholder='Latitude'>
@@ -64,7 +64,7 @@
                                     <label for='longitude'> Longitude: </label>
                                     <input
                                         readonly
-                                        v-model='waypoint.longitude'
+                                        v-model='points[waypoint.id].longitude'
                                         class='form-control'
                                         :class="{'is-invalid': get(this.error_data, 'errors.longitude[0]', false)}"
                                         type='text' id='longitude' placeholder='Longitude'>
@@ -75,7 +75,7 @@
                             <div class='form-group'>
                                 <label for='name'> Nama Waypoint: </label>
                                 <input
-                                    v-model='waypoint.name'
+                                    v-model='points[waypoint.id].name'
                                     class='form-control'
                                     :class="{'is-invalid': get(this.error_data, 'errors.name[0]', false)}"
                                     type='text' id='name' placeholder='Nama Waypoint'>
@@ -136,9 +136,9 @@
         computed: {
             form_data() {
                 return {
-                    name: this.waypoint.name,
-                    latitude: this.waypoint.latitude,
-                    longitude: this.waypoint.longitude
+                    name: this.points[this.waypoint.id].name,
+                    latitude: this.points[this.waypoint.id].latitude,
+                    longitude: this.points[this.waypoint.id].longitude
                 }
             }
         },
@@ -146,8 +146,8 @@
         methods: {
             get: get,
             mapClicked(event) {
-                this.waypoint.latitude = event.latLng.lat(),
-                this.waypoint.longitude = event.latLng.lng()
+                this.points[this.waypoint.id].latitude = event.latLng.lat(),
+                this.points[this.waypoint.id].longitude = event.latLng.lng()
             },
             formSubmit(event) {
                 event.preventDefault()
