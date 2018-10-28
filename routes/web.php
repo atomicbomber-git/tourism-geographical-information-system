@@ -22,16 +22,16 @@ Route::get('/home', 'HomeController@index')->name('home');
 Route::redirect('/', '/waypoint/index');
 
 Route::group(['prefix' => '/site', 'as' => 'site.'], function() {
+    Route::get('/index', 'SiteController@index')->name('index');
+    Route::get('/create', 'SiteController@create')->name('create');
     Route::get('/map', 'SiteController@map')->name('map');
 });
 
 Route::group(['prefix' => '/waypoint', 'as' => 'waypoint.'], function() {
     Route::get('/index', 'WaypointController@index')->name('index');
     Route::get('/create', 'WaypointController@create')->name('create');
-    
     Route::get('/edit/{waypoint}', 'WaypointController@edit')->name('edit');
     Route::put('/update/{waypoint}', 'WaypointController@update')->name('update');
-
     Route::post('/store', 'WaypointController@store')->name('store');
     Route::delete('/delete/{waypoint}', 'WaypointController@delete')->name('delete');
 });

@@ -11,6 +11,8 @@
                         <gmap-map
                             ref="map"
                             @click="mapClicked"
+                            @zoom_changed="saveZoom"
+                            @center_changed="saveCenter"
                             :center="{lat: mapCenter.lat, lng: mapCenter.lng}"
                             :zoom="mapZoom"
                             style="width: 100%; height: 640px"
@@ -106,6 +108,7 @@
 
         mounted() {
             this.$refs.map.$mapPromise.then(map => {
+                this.map = map
                 map.setOptions({
                     styles: window.gmap_style
                 });
@@ -142,6 +145,13 @@
 
         methods: {
             get: get,
+            saveZoom() {
+                window.localStorage.setItem('gmap_zoom', this.map.getZoom())
+            },
+            saveCenter() {
+                window.localStorage.setItem('gmap_center_lat', this.map.getCenter().lat())
+                window.localStorage.setItem('gmap_center_lng', this.map.getCenter().lng())
+            },
             mapClicked(event) {
                 this.latitude = event.latLng.lat(),
                 this.longitude = event.latLng.lng()

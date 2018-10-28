@@ -8,6 +8,27 @@ use App\Path;
 
 class SiteController extends Controller
 {
+    public function index() {
+
+        $points = Point::query()
+            ->isSite()
+            ->select('id', 'name', 'type')
+            ->with('site:id,point_id,visitor_count,fee,facility_count')
+            ->get();
+
+        return view('site.index', compact('points'));
+    }
+
+    public function create()
+    {
+        $points = Point::query()
+            ->select('id', 'name', 'latitude', 'longitude', 'type')
+            ->with('paths_from:point_a_id,point_b_id')
+            ->get();
+
+        return view('site.create', compact('points'));
+    }
+
     public function map()
     {
         $points = Point::query()

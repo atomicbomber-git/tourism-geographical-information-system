@@ -2,7 +2,7 @@
 
 use Illuminate\Database\Seeder;
 
-class PointSeeder extends Seeder
+class SiteSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -11,6 +11,6 @@ class PointSeeder extends Seeder
      */
     public function run()
     {
-        factory(App\Point::class, 10)->create(['type' => 'WAYPOINT']);
+        factory(App\Site::class, 10)->create();
     }
 }

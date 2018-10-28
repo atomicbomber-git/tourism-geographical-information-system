@@ -1,10 +1,10 @@
 @extends('shared.layout')
-@section('title', 'Kelola Situs Pariwisata')
+@section('title', 'Kelola Situs Wisata')
 @section('content')
 <div class="container my-5">
     <h1 class="mb-5">
         <i class="fa fa-map"></i>
-        Peta Situs Pariwisata
+        Peta Situs Wisata
     </h1>
 
     <div id="app">

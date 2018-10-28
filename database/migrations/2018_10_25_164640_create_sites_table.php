@@ -15,6 +15,16 @@ class CreateSitesTable extends Migration
     {
         Schema::create('sites', function (Blueprint $table) {
             $table->increments('id');
+
+            $table->integer('point_id')->unsigned();
+            $table->integer('visitor_count')->unsigned();
+            $table->decimal('fee', 19, 4)->unsigned();
+            $table->integer('facility_count')->unsigned();
+
+            $table->foreign('point_id')
+                ->references('id')
+                ->on('points');
+
             $table->timestamps();
         });
     }

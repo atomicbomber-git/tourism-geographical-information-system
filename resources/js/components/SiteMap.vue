@@ -5,7 +5,7 @@
                 <div class="card">
                     <div class="card-header">
                         <i class="fa fa-map"></i>
-                        Peta Situs Pariwisata
+                        Peta Situs Wisata
                     </div>
                     
                     <div class="card-body">

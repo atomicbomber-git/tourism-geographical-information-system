@@ -11,6 +11,7 @@ Vue.use(VueGoogleMaps, {
     },
 })
 
+Vue.component('site-create', require('./components/SiteCreate.vue'));
 Vue.component('site-map', require('./components/SiteMap.vue'));
 Vue.component('waypoint-create', require('./components/WaypointCreate.vue'));
 Vue.component('waypoint-edit', require('./components/WaypointEdit.vue'));

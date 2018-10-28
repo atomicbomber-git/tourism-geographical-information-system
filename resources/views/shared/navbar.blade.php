@@ -42,6 +42,7 @@
                         Situs
                     </a>
                     <div class='dropdown-menu' aria-labelledby='site'>
+                        <a class='dropdown-item' href='{{ route('site.index') }}'> Daftar Situs </a>
                         <a class='dropdown-item' href='{{ route('site.map') }}'> Peta Rute </a>
                     </div>
                 </li>

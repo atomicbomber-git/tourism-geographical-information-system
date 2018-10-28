@@ -24,4 +24,14 @@ class Point extends Model
     {
         return $this->hasMany(Path::class, 'point_b_id');
     }
+
+    public function scopeIsSite()
+    {
+        return $this->where('type', 'SITE');
+    }
+
+    public function site()
+    {
+        return $this->hasOne(Site::class);
+    }
 }
