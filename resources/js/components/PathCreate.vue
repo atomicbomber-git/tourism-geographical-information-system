@@ -20,7 +20,9 @@
                             <div v-for="point in points" :key="point.id" >
                                 <gmap-marker
                                     :position="{lat: point.latitude, lng: point.longitude}"
+                                    @click="markerClick(point)"
                                     :label="{ text: point.name, fontSize: '14pt', fontWeight: 'bold', color: 'black'}"
+                                    :icon="markerIcon(point)"
                                     />
                                 <gmap-polyline
                                     v-for="path in point.paths_from"
@@ -94,7 +96,7 @@
                     lng: parseFloat(localStorage.gmap_center_lng) || 109.4806557
                 },
                 styles: window.gmap_styles,
-                points: init_points,
+                points: _.mapValues(init_points, point => { return {...point, is_selected: false} }),
                 start_point_id: null,
                 end_point_id: null,
             }
@@ -138,7 +140,13 @@
         },
 
         methods: {
-            
+            markerIcon(point) {
+                if (point.id == this.start_point_id || point.id == this.end_point_id) {
+                    return '/png/marker_lime.png'
+                }
+
+                return '/png/marker_blue.png'
+            },
 
             saveZoom() {
                 window.localStorage.setItem('gmap_zoom', this.map.getZoom())
@@ -147,6 +155,31 @@
             saveCenter() {
                 window.localStorage.setItem('gmap_center_lat', this.map.getCenter().lat())
                 window.localStorage.setItem('gmap_center_lng', this.map.getCenter().lng())
+            },
+
+            markerClick(point) {
+                if (this.start_point_id == null) {
+                    this.start_point_id = point.id
+                    return
+                }
+
+                if (this.start_point_id == point.id) {
+                    this.start_point_id = null
+                }
+
+                if (this.end_point_id == null) {
+                    if (this.end_points.find(end_point => end_point.id == point.id) !== undefined) {
+                        this.end_point_id = point.id
+                    }
+                    return
+                }
+
+                if (this.end_point_id == point.id) {
+                    this.end_point_id = null
+                }
+
+                this.start_point_id = point.id
+                this.end_point_id = null
             },
 
             submitForm(event) {

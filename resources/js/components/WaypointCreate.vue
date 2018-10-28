@@ -19,13 +19,15 @@
                             <gmap-marker
                                 v-if="this.latitude && this.longitude"
                                 :position="{lat: this.latitude, lng: this.longitude}"
-                                icon="/png/location_red.png"
+                                icon="/png/marker_lime.png"
+                                :label="{ text: name || ' ', fontSize: '14pt', fontWeight: 'bold', color: 'black'}"
                                 />
 
                             <div v-for="point in points" :key="point.id">
                                 <gmap-marker
                                     :position="{lat: point.latitude, lng: point.longitude}"
                                     :label="{ text: point.name, fontSize: '14pt', fontWeight: 'bold', color: 'black'}"
+                                    icon="/png/marker_blue.png"
                                     />
 
                                 <gmap-polyline
@@ -115,7 +117,7 @@
                 points: window.init_points,
 
                 // Data
-                name: '',
+                name: "",
                 error_data: null,
                 latitude: null,
                 longitude: null,

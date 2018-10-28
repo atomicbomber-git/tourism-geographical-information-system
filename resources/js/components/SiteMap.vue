@@ -24,6 +24,7 @@
                                 <GmapMarker
                                     :position="{lat: point.latitude, lng: point.longitude}"
                                     :label="{ text: point.name, fontSize: '14pt', fontWeight: 'bold', color: 'black'}"
+                                    icon="/png/marker_blue.png"
                                     >
                                 </GmapMarker>
 
@@ -203,7 +204,32 @@
 
             deg2rad(deg) {
                 return deg * (Math.PI/180)
-            }
+            },
+
+            // markerClick(point) {
+            //     if (this.start_point == null) {
+            //         this.start_point = point.id
+            //         return
+            //     }
+
+            //     if (this.start_point == point.id) {
+            //         this.start_point = null
+            //     }
+
+            //     if (this.end_point == null) {
+            //         if (this.end_points.find(ep => ep.id == point.id) !== undefined) {
+            //             this.end_point = point.id
+            //         }
+            //         return
+            //     }
+
+            //     if (this.end_point == point.id) {
+            //         this.end_point = null
+            //     }
+
+            //     this.start_point = point.id
+            //     this.end_point = null
+            // },
         },
 
         data() {
