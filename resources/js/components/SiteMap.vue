@@ -129,43 +129,47 @@
                 start.visited = true
                 let current_point = start
 
-                while (true) {
-
-                    let visitable_paths = current_point.paths.filter(path => {
-                        return this.points[path.id].visited == false
+                let visit = point => {
+                    
+                    let visitable_paths = point.paths.filter(path => {
+                        return !this.points[path.id].visited
                     })
 
-                    // console.table(_.mapValues(this.points))
-                    // console.log(this.points[1].visited)
-
-                    if (visitable_paths.length == 0) {
-                        current_point.visited = true
-                        break;
-                    }
-                
                     visitable_paths.forEach(path => {
-                        if (current_point.tentative_dist + this.haversineDist(this.points[path.id].latitude, this.points[path.id].longitude, current_point.latitude, current_point.longitude) < this.points[path.id].tentative_dist) {
-                            this.points[path.id].tentative_dist =
-                                current_point.tentative_dist +
-                                this.haversineDist(this.points[path.id].latitude, this.points[path.id].longitude, current_point.latitude, current_point.longitude)
-                            this.points[path.id].prev_point = current_point.id
-                            // console.log(`Setting ${this.points[path.id].name}'s distance to ${this.points[path.id].tentative_dist}`)
+                        
+                        let another_point = this.points[path.id]
+                        
+                        // Calculate distance
+                        const dist = this.haversineDist(
+                            point.latitude, point.longitude,
+                            another_point.latitude, another_point.longitude
+                        )
+
+                        if (point.tentative_dist + dist < another_point.tentative_dist) {
+                            another_point.tentative_dist = point.tentative_dist + dist 
+                            another_point.prev_point = point.id
                         }
                     })
-
-                    current_point.visited = true
-                    // console.log(`Setting ${current_point.name} to VISITED`)
-
-                    // Determine next point to be visited
-                    let next_point_id = _.minBy(visitable_paths, path => {
-                        return this.points[path.id].tentative_dist
-                    }).id
-
-                    current_point = this.points[next_point_id]
+                    
+                    console.log(point.name)
+                    point.visited = true
                 }
 
-                // Generate best track from Dijksta algorithm's result
-                
+                while (true) {
+                    visit(current_point)
+
+                    let visitables = Object.keys(this.points)
+                        .map(key => { return {id: key, ...this.points[key]} })
+                        .filter(point => !point.visited)
+                        .sort((point_a, point_b) => point_a.tentative_dist - point_b.tentative_dist)
+
+                    if (visitables.length == 0) {
+                        break
+                    }
+
+                    current_point = this.points[visitables[0].id]
+                }
+
                 let current = this.points[this.finish_point]
                 this.track = []
                 

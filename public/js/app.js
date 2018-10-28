@@ -50415,40 +50415,46 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
             start.visited = true;
             var current_point = start;
 
-            while (true) {
+            var visit = function visit(point) {
 
-                var visitable_paths = current_point.paths.filter(function (path) {
-                    return _this2.points[path.id].visited == false;
+                var visitable_paths = point.paths.filter(function (path) {
+                    return !_this2.points[path.id].visited;
                 });
 
-                // console.table(_.mapValues(this.points))
-                // console.log(this.points[1].visited)
-
-                if (visitable_paths.length == 0) {
-                    current_point.visited = true;
-                    break;
-                }
-
                 visitable_paths.forEach(function (path) {
-                    if (current_point.tentative_dist + _this2.haversineDist(_this2.points[path.id].latitude, _this2.points[path.id].longitude, current_point.latitude, current_point.longitude) < _this2.points[path.id].tentative_dist) {
-                        _this2.points[path.id].tentative_dist = current_point.tentative_dist + _this2.haversineDist(_this2.points[path.id].latitude, _this2.points[path.id].longitude, current_point.latitude, current_point.longitude);
-                        _this2.points[path.id].prev_point = current_point.id;
-                        // console.log(`Setting ${this.points[path.id].name}'s distance to ${this.points[path.id].tentative_dist}`)
+
+                    var another_point = _this2.points[path.id];
+
+                    // Calculate distance
+                    var dist = _this2.haversineDist(point.latitude, point.longitude, another_point.latitude, another_point.longitude);
+
+                    if (point.tentative_dist + dist < another_point.tentative_dist) {
+                        another_point.tentative_dist = point.tentative_dist + dist;
+                        another_point.prev_point = point.id;
                     }
                 });
 
-                current_point.visited = true;
-                // console.log(`Setting ${current_point.name} to VISITED`)
+                console.log(point.name);
+                point.visited = true;
+            };
 
-                // Determine next point to be visited
-                var next_point_id = _.minBy(visitable_paths, function (path) {
-                    return _this2.points[path.id].tentative_dist;
-                }).id;
+            while (true) {
+                visit(current_point);
 
-                current_point = this.points[next_point_id];
+                var visitables = Object.keys(this.points).map(function (key) {
+                    return _extends({ id: key }, _this2.points[key]);
+                }).filter(function (point) {
+                    return !point.visited;
+                }).sort(function (point_a, point_b) {
+                    return point_a.tentative_dist - point_b.tentative_dist;
+                });
+
+                if (visitables.length == 0) {
+                    break;
+                }
+
+                current_point = this.points[visitables[0].id];
             }
-
-            // Generate best track from Dijksta algorithm's result
 
             var current = this.points[this.finish_point];
             this.track = [];
