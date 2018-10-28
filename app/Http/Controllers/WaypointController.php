@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Validation\Rule;
 use App\Point;
 use App\Path;
 
@@ -60,5 +61,32 @@ class WaypointController extends Controller
 
         return back()
             ->with('message.success', __('messages.delete.success'));
+    }
+
+    public function edit(Point $waypoint)
+    {
+        $points = Point::query()
+            ->select('id', 'name', 'latitude', 'longitude')
+            ->where('type', 'WAYPOINT')
+            ->with('paths_from:point_a_id,point_b_id')
+            ->get()
+            ->keyBy('id');
+
+        return view('waypoint.edit', compact('waypoint', 'points'));
+    }
+
+    public function update(Point $waypoint)
+    {
+        $data = $this->validate(request(), [
+            'name' => ['required', 'string', Rule::unique('points')->ignore($waypoint->id)],
+            'latitude' => 'required|numeric',
+            'longitude' => 'required|numeric',
+        ]);
+
+        $waypoint->update($data);
+
+        return [
+            'success' => true
+        ];
     }
 }

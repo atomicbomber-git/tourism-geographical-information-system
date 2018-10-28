@@ -13,6 +13,7 @@ Vue.use(VueGoogleMaps, {
 
 Vue.component('site-map', require('./components/SiteMap.vue'));
 Vue.component('waypoint-create', require('./components/WaypointCreate.vue'));
+Vue.component('waypoint-edit', require('./components/WaypointEdit.vue'));
 Vue.component('path-create', require('./components/PathCreate.vue'));
 
 const app = new Vue({

@@ -45,6 +45,10 @@
                         <td> {{ $point->latitude }} </td>
                         <td> {{ $point->longitude }} </td>
                         <td>
+                            <a href="{{ route('waypoint.edit', $point) }}" class="btn btn-dark btn-sm">
+                                <i class="fa fa-pencil"></i>
+                            </a>
+
                             <form action="{{ route('waypoint.delete', $point) }}" method="POST" class="d-inline-block">
                                 @method('DELETE')
                                 @csrf
