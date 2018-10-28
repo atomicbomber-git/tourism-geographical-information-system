@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use App\Point;
 use App\Path;
+use App\Site;
 
 class SiteController extends Controller
 {
@@ -28,6 +30,34 @@ class SiteController extends Controller
             ->keyBy('id');
 
         return view('site.create', compact('points'));
+    }
+
+    public function store()
+    {
+        $data = $this->validate(request(), [
+            'name' => 'required|string|unique:points',
+            'latitude' => 'required|numeric',
+            'longitude' => 'required|numeric',
+            'visitor_count' => 'required|numeric',
+            'fee' => 'required|numeric',
+            'facility_count' => 'required|numeric'
+        ]);
+
+        DB::transaction(function() use($data) {
+            $point = Point::create([
+                'name' => $data['name'],
+                'latitude' => $data['latitude'],
+                'longitude' => $data['longitude'],
+                'type' => 'SITE'
+            ]);
+
+            Site::create([
+                'point_id' => $point->id,
+                'visitor_count' => $data['visitor_count'],
+                'fee' => $data['fee'],
+                'facility_count' => $data['facility_count']
+            ]);
+        });
     }
 
     public function map()

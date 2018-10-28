@@ -24,6 +24,7 @@ Route::redirect('/', '/waypoint/index');
 Route::group(['prefix' => '/site', 'as' => 'site.'], function() {
     Route::get('/index', 'SiteController@index')->name('index');
     Route::get('/create', 'SiteController@create')->name('create');
+    Route::post('/store', 'SiteController@store')->name('store');
     Route::get('/map', 'SiteController@map')->name('map');
 });
 

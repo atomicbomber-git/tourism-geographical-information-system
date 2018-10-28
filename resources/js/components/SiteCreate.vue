@@ -21,7 +21,8 @@
 
                             <gmap-marker
                                 :position="marker_position"
-                                :icon="marker_icon"/>
+                                :icon="marker_icon"
+                                :label="pointerMarkerLabel()"/>
 
                             <div v-for="point in points"
                                 :key="point.id">
@@ -49,7 +50,7 @@
                     </div>
 
                     <div class="card-body">
-                        <form>
+                        <form @submit="formSubmitted">
                             <div class="form-row">
                                 <div class='form-group col-md-6'>
                                     <label for='latitude'> Latitude: </label>
@@ -161,6 +162,17 @@
 
             markerLabel(point) {
                 return { text: point.name, ...window.gmap_config.marker.label }
+            },
+
+            pointerMarkerLabel(name) {
+                return { text: this.name || ' ', ...window.gmap_config.marker.label }
+            },
+
+            formSubmitted(event) {
+                event.preventDefault()
+                axios.post(`/site/store`, this.form_data)
+                    .then(response => { window.location.reload(true) })
+                    .catch(error => { this.error_data = error.response.data })
             }
         },
 
@@ -191,11 +203,26 @@
 
                 marker_icon: window.gmap_config.marker.icons.active,
                 points: window.init_points,
-                error_data: null
+                error_data: null,
+
+                name: '',
+                visitor_count: null,
+                fee: null,
+                facility_count: null,
             }
         },
 
         computed: {
+            form_data() {
+                return {
+                    name: this.name,
+                    latitude: this.marker_position.lat,
+                    longitude: this.marker_position.lng,
+                    visitor_count: this.visitor_count,
+                    fee: this.fee,
+                    facility_count: this.facility_count,
+                }
+            }
         }
     }
 </script>
