@@ -45,6 +45,7 @@
                         <a class='dropdown-item' href='{{ route('site.index') }}'> Daftar Situs </a>
                         <a class='dropdown-item' href='{{ route('site.create') }}'> Tambah Situs </a>
                         <a class='dropdown-item' href='{{ route('site.map') }}'> Peta Rute </a>
+                        <a class='dropdown-item' href='{{ route('site.analysis') }}'> Hasil Analisis </a>
                     </div>
                 </li>
             </div>

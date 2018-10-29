@@ -4,9 +4,9 @@ use Faker\Generator as Faker;
 
 $factory->define(App\Site::class, function (Faker $faker) {
     return [
-        'visitor_count' => rand(30000, 40000),
-        'fee' => rand(5, 10) * 10000,
-        'facility_count' => rand(5, 8),
+        'visitor_count' => rand(30000, 50000),
+        'fee' => rand(5, 25) * 10000,
+        'facility_count' => rand(2, 12),
         'point_id' => factory(App\Point::class)->create(['type' => 'SITE'])->id
     ];
 });
