@@ -26,6 +26,9 @@ Route::group(['prefix' => '/site', 'as' => 'site.'], function() {
     Route::get('/create', 'SiteController@create')->name('create');
     Route::post('/store', 'SiteController@store')->name('store');
     Route::get('/map', 'SiteController@map')->name('map');
+
+    Route::get('/analyze', 'SiteController@analyze')->name('analyze');
+    Route::get('/analysis', 'SiteController@analysis')->name('analysis');
 });
 
 Route::group(['prefix' => '/waypoint', 'as' => 'waypoint.'], function() {
