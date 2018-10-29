@@ -60,6 +60,21 @@ class SiteController extends Controller
         });
     }
 
+    public function delete(Site $site)
+    {
+        DB::transaction(function() use($site) {
+            Path::where('point_a_id', $site->point->id)
+                ->orWhere('point_b_id', $site->point->id)
+                ->delete();
+
+            $site->delete();
+            $site->point->delete();
+        });
+
+        return back()
+            ->with('message.success', __('messages.delete.success'));
+    }
+
     public function map()
     {
         $points = Point::query()

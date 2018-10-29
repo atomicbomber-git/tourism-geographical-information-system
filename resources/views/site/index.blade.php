@@ -18,6 +18,8 @@
         <div class="col"></div>
     </div>
 
+    @include('shared.message', ['session_key' => 'message.success', 'state' => 'success'])
+
     <div class="card">
         <div class="card-header">
             <i class="fa fa-tree"></i>
@@ -45,7 +47,13 @@
                         <td> {{ $point->site->facility_count }} </td>
                         <td> {{ number_format($point->site->fee, 0, ',', '.') }} </td>
                         <td>
-
+                            <form action='{{ route('site.delete', $point->site) }}' method='POST' class='d-inline-block'>
+                                @method('DELETE')
+                                @csrf
+                                <button type='submit' class='btn btn-danger btn-sm'>
+                                    <i class='fa fa-trash'></i>
+                                </button>
+                            </form>
                         </td>
                     </tr>
                    @endforeach
