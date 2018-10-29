@@ -27,8 +27,8 @@ Route::group(['prefix' => '/site', 'as' => 'site.'], function() {
     Route::post('/store', 'SiteController@store')->name('store');
     Route::get('/map', 'SiteController@map')->name('map');
     Route::delete('/delete/{site}', 'SiteController@delete')->name('delete');
-    Route::get('/analyze', 'SiteController@analyze')->name('analyze');
-    Route::get('/analysis', 'SiteController@analysis')->name('analysis');
+    Route::get('/analyze', 'AnalysisController@analyze')->name('analyze');
+    Route::post('/analysis', 'AnalysisController@analysis')->name('analysis');
 });
 
 Route::group(['prefix' => '/waypoint', 'as' => 'waypoint.'], function() {

@@ -7,6 +7,39 @@
         Hasil Proses AHP terhadap Data Situs Wisata
     </h1>
 
+    <div class="card">
+        <div class="card-header">
+            <i class="fa fa-icon"></i>
+            Hasil Kalkulasi Prioritas Aspek
+        </div>
+        <div class="card-body">
+           <table class="tabel table-sm table-bordered">
+               <tbody>
+                    <tr class="table-info">
+                        <th> ASPEK </th>
+                        @foreach ($aspect_comparisons as $aspect_key => $comparisons)
+                        <th> {{ $aspects[$aspect_key] }} </th>
+                        @endforeach
+                    </tr>
+                    @foreach ($aspect_comparisons as $aspect_key_r => $comparisons)
+                    <tr>
+                        <th class="table-info"> {{ $aspects[$aspect_key] }} </th>
+                        @foreach ($comparisons as $comparison)
+                        <td> @number_format($comparison) </td>
+                        @endforeach
+                    </tr>
+                    @endforeach
+                    <tr class="table-danger">
+                        <th> Total: </th>
+                        @foreach ($aspect_comparisons as $aspect_key => $comparisons)
+                        <td> @number_format($aspect_comparison_sums[$aspect_key]) </td>
+                        @endforeach
+                    </tr>
+               </tbody>
+           </table>
+        </div>
+    </div>
+
 
     @foreach ($aspects as $aspect_key => $aspect_name)
     <div class="card mb-5">
