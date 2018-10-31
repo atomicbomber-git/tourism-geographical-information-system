@@ -13,6 +13,7 @@
 </div>
 
 @javascript('gmap_config', config('gmap_config'))
+@javascript('categories', $categories)
 @javascript('init_points', $points)
 
 @endsection

@@ -114,6 +114,19 @@
                                 <div class='invalid-feedback'>{{ get(this.error_data, 'errors.facility_count[0]', false) }}</div>
                             </div>
 
+                            <div class="form-group">
+                                <label for="site_category_id"> Kategori: </label>
+                                <select
+                                    :class="{'is-invalid': get(this.error_data, 'errors.site_category_id[0]', false)}"
+                                    class="form-control"
+                                    v-model="site_category_id">
+                                    <option v-for="category in categories" :key="category.id" :value="category.id">
+                                        {{ category.name }}
+                                    </option>
+                                </select>
+                                <div class='invalid-feedback'>{{ get(this.error_data, 'errors.site_category_id[0]', false) }}</div>
+                            </div>
+
                             <div class="form-group text-right">
                                 <button type="submit" class="btn btn-primary">
                                     Tambahkan Situs Wisata
@@ -209,10 +222,15 @@
                 visitor_count: null,
                 fee: null,
                 facility_count: null,
+                site_category_id: null
             }
         },
 
         computed: {
+            categories() {
+                return window.categories;
+            },
+
             form_data() {
                 return {
                     name: this.name,
@@ -221,6 +239,7 @@
                     visitor_count: this.visitor_count,
                     fee: this.fee,
                     facility_count: this.facility_count,
+                    site_category_id: this.site_category_id
                 }
             }
         }

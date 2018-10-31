@@ -34,6 +34,7 @@
                        <th> J. Pengunjung Tahunan </th>
                        <th> J. Fasilitas </th>
                        <th> H. Tiket Masuk </th>
+                       <th> Kategori </th>
                        <th> Aksi </th>
                    </tr>
                </thead>
@@ -46,6 +47,7 @@
                         <td> {{ $point->site->visitor_count }} </td>
                         <td> {{ $point->site->facility_count }} </td>
                         <td> {{ number_format($point->site->fee, 0, ',', '.') }} </td>
+                        <td> {{ $point->site->category->name }} </td>
                         <td>
                             <form action='{{ route('site.delete', $point->site) }}' method='POST' class='d-inline-block'>
                                 @method('DELETE')

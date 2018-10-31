@@ -23,7 +23,7 @@
                     </tr>
                     @foreach ($aspect_comparisons as $aspect_key_r => $comparisons)
                     <tr>
-                        <th class="table-info"> {{ $aspects[$aspect_key] }} </th>
+                        <th class="table-info"> {{ $aspects[$aspect_key_r] }} </th>
                         @foreach ($comparisons as $comparison)
                         <td> @number_format($comparison) </td>
                         @endforeach
@@ -40,6 +40,37 @@
         </div>
     </div>
 
+    <div class="card">
+        <div class="card-header">
+            <i class="fa fa-icon"></i>
+            Hasil Kalkulasi Prioritas Aspek
+        </div>
+        <div class="card-body">
+           <table class="tabel table-sm table-bordered">
+               <tbody>
+                    <tr class="table-info">
+                        <th> ASPEK </th>
+                        @foreach ($normalized_aspect_comparisons as $aspect_key => $comparisons)
+                        <th> {{ $aspects[$aspect_key] }} </th>
+                        @endforeach
+                        <th> Prioritas </th>
+                    </tr>
+                    @foreach ($normalized_aspect_comparisons as $aspect_key_r => $priorities)
+                    <tr>
+                        <th class="table-info"> {{ $aspects[$aspect_key_r] }} </th>
+                        @foreach ($priorities as $priority)
+                        <td> @number_format($priority) </td>
+                        @endforeach
+
+                        <td> @number_format($aspect_priorities[$aspect_key_r]) </td>
+
+                    </tr>
+                    @endforeach
+
+               </tbody>
+           </table>
+        </div>
+    </div>
 
     @foreach ($aspects as $aspect_key => $aspect_name)
     <div class="card mb-5">

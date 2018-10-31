@@ -4,9 +4,11 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Validation\Rule;
 use App\Point;
 use App\Path;
 use App\Site;
+use App\SiteCategory;
 
 class SiteController extends Controller
 {
@@ -15,7 +17,8 @@ class SiteController extends Controller
         $points = Point::query()
             ->isSite()
             ->select('id', 'name', 'type')
-            ->with('site:id,point_id,visitor_count,fee,facility_count')
+            ->with('site:id,point_id,visitor_count,fee,facility_count,site_category_id')
+            ->with('site.category:id,name')
             ->get();
 
         return view('site.index', compact('points'));
@@ -28,19 +31,25 @@ class SiteController extends Controller
             ->with('paths_from:point_a_id,point_b_id')
             ->get()
             ->keyBy('id');
+        
+        $categories = SiteCategory::select('id', 'name')
+            ->get();
 
-        return view('site.create', compact('points'));
+        return view('site.create', compact('points', 'categories'));
     }
 
     public function store()
     {
+        $site_category_ids = SiteCategory::select('id')->pluck('id');
+
         $data = $this->validate(request(), [
             'name' => 'required|string|unique:points',
             'latitude' => 'required|numeric',
             'longitude' => 'required|numeric',
             'visitor_count' => 'required|numeric',
             'fee' => 'required|numeric',
-            'facility_count' => 'required|numeric'
+            'facility_count' => 'required|numeric',
+            'site_category_id' => ['required', Rule::in($site_category_ids)]
         ]);
 
         DB::transaction(function() use($data) {
@@ -55,7 +64,8 @@ class SiteController extends Controller
                 'point_id' => $point->id,
                 'visitor_count' => $data['visitor_count'],
                 'fee' => $data['fee'],
-                'facility_count' => $data['facility_count']
+                'facility_count' => $data['facility_count'],
+                'site_category_id' => $data['site_category_id']
             ]);
         });
     }

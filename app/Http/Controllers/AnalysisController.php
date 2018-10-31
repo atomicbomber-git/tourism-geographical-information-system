@@ -29,16 +29,20 @@ class AnalysisController extends Controller
             foreach ($data as $key_r => $value_r) {
                 $ratio = $value_h / $value_r;
                 $aspect_comparisons[$key_h][$key_r] = $ratio;
-                $aspect_comparison_sums[$key_r] = $aspect_comparison_sums[$key_r] ?? 0 + $ratio;
+                $aspect_comparison_sums[$key_r] = ($aspect_comparison_sums[$key_r] ?? 0) + $ratio;
             }
         }
 
-        $aspect_priorities = $aspect_comparisons
+        $normalized_aspect_comparisons = $aspect_comparisons
             ->map(function($aspect_comparison) use($aspect_comparison_sums) {
                 return $aspect_comparison->map(function($value, $key) use($aspect_comparison_sums) {
                     return $value / $aspect_comparison_sums[$key];
                 });
             });
+
+        $aspect_priorities = $normalized_aspect_comparisons->map(function ($priorities) {
+            return $priorities->average();
+        });
 
         $points = Point::query()
             ->isSite()
@@ -93,7 +97,7 @@ class AnalysisController extends Controller
 
         return view(
             'site.analysis',
-            compact('points', 'aspects', 'local_comparisons', 'local_comparison_sums', 'local_priorities', 'aspect_comparisons', 'aspect_comparison_sums')
+            compact('points', 'aspects', 'local_comparisons', 'local_comparison_sums', 'local_priorities', 'aspect_comparisons', 'aspect_comparison_sums', 'normalized_aspect_comparisons', 'aspect_priorities')
         );
     }
 

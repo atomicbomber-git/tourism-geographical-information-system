@@ -50417,6 +50417,19 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -50496,12 +50509,16 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
             name: '',
             visitor_count: null,
             fee: null,
-            facility_count: null
+            facility_count: null,
+            site_category_id: null
         };
     },
 
 
     computed: {
+        categories: function categories() {
+            return window.categories;
+        },
         form_data: function form_data() {
             return {
                 name: this.name,
@@ -50509,7 +50526,8 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
                 longitude: this.marker_position.lng,
                 visitor_count: this.visitor_count,
                 fee: this.fee,
-                facility_count: this.facility_count
+                facility_count: this.facility_count,
+                site_category_id: this.site_category_id
             };
         }
     }
@@ -50888,6 +50906,74 @@ var render = function() {
                       _vm.get(
                         this.error_data,
                         "errors.facility_count[0]",
+                        false
+                      )
+                    )
+                  )
+                ])
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "form-group" }, [
+                _c("label", { attrs: { for: "site_category_id" } }, [
+                  _vm._v(" Kategori: ")
+                ]),
+                _vm._v(" "),
+                _c(
+                  "select",
+                  {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.site_category_id,
+                        expression: "site_category_id"
+                      }
+                    ],
+                    staticClass: "form-control",
+                    class: {
+                      "is-invalid": _vm.get(
+                        this.error_data,
+                        "errors.site_category_id[0]",
+                        false
+                      )
+                    },
+                    on: {
+                      change: function($event) {
+                        var $$selectedVal = Array.prototype.filter
+                          .call($event.target.options, function(o) {
+                            return o.selected
+                          })
+                          .map(function(o) {
+                            var val = "_value" in o ? o._value : o.value
+                            return val
+                          })
+                        _vm.site_category_id = $event.target.multiple
+                          ? $$selectedVal
+                          : $$selectedVal[0]
+                      }
+                    }
+                  },
+                  _vm._l(_vm.categories, function(category) {
+                    return _c(
+                      "option",
+                      { key: category.id, domProps: { value: category.id } },
+                      [
+                        _vm._v(
+                          "\n                                    " +
+                            _vm._s(category.name) +
+                            "\n                                "
+                        )
+                      ]
+                    )
+                  })
+                ),
+                _vm._v(" "),
+                _c("div", { staticClass: "invalid-feedback" }, [
+                  _vm._v(
+                    _vm._s(
+                      _vm.get(
+                        this.error_data,
+                        "errors.site_category_id[0]",
                         false
                       )
                     )

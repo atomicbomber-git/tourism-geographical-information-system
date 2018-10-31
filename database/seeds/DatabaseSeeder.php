@@ -12,6 +12,7 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
         $this->call(PointSeeder::class);
+        $this->call(SiteCategorySeeder::class);
         $this->call(SiteSeeder::class);
         $this->call(PathSeeder::class);
     }
