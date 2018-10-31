@@ -66,7 +66,6 @@ class WaypointController extends Controller
     {
         $points = Point::query()
             ->select('id', 'name', 'latitude', 'longitude')
-            ->where('type', 'WAYPOINT')
             ->with('paths_from:point_a_id,point_b_id')
             ->get()
             ->keyBy('id');
