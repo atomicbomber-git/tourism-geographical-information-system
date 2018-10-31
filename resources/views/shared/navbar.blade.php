@@ -48,6 +48,18 @@
                         <a class='dropdown-item' href='{{ route('site.analyze') }}'> Situs Terfavorit </a>
                     </div>
                 </li>
+
+                <li class='nav-item dropdown {{ Route::is('site_category.*') ? 'active' : '' }}'>
+                    <a
+                        class='nav-link dropdown-toggle' href='#' id='site_category' role='button'
+                        data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>
+                        <i class='fa fa-list'></i>
+                        Kategori Situs
+                    </a>
+                    <div class='dropdown-menu' aria-labelledby='site_category'>
+                        <a class='dropdown-item' href='#'> Daftar Kategori </a>
+                    </div>
+                </li>
             </div>
         </div>
     </div>
