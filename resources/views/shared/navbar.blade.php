@@ -9,6 +9,18 @@
             <div class="navbar-nav">
                 @auth
 
+                <li class='nav-item dropdown {{ Route::is('slide.*') ? 'active' : '' }}'>
+                    <a
+                        class='nav-link dropdown-toggle' href='#' id='slide' role='button'
+                        data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>
+                        <i class='fa fa-wrench'></i>
+                        Pengaturan Web
+                    </a>
+                    <div class='dropdown-menu' aria-labelledby='slide'>
+                        <a class='dropdown-item' href='{{ route('slide.index') }}'> Gambar Slide </a>
+                    </div>
+                </li>
+
                 <li class='nav-item dropdown {{ Route::is('waypoint.*') ? 'active' : '' }}'>
                     <a
                         class='nav-link dropdown-toggle' href='#' id='waypoint' role='button'

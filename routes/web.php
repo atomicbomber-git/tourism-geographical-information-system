@@ -45,5 +45,8 @@ Route::group(['prefix' => '/path', 'as' => 'path.'], function() {
 });
 
 Route::group(['prefix' => '/slide', 'as' => 'slide.'], function() {
+    Route::get('/index', 'SlideController@index')->name('index');
+    Route::get('/edit/{slide}', 'SlideController@edit')->name('edit');
+    Route::post('/update/{slide}', 'SlideController@update')->name('update');
     Route::get('/image/{slide}', 'SlideController@image')->name('image');
 });
