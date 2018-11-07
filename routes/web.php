@@ -11,15 +11,12 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+// Route::get('/', function () {
+//     return view('welcome');
+// });
 
 Auth::routes();
-
-Route::get('/home', 'HomeController@index')->name('home');
-
-Route::redirect('/', '/waypoint/index');
+Route::get('/', 'HomeController@index')->name('home');
 
 Route::group(['prefix' => '/site', 'as' => 'site.'], function() {
     Route::get('/index', 'SiteController@index')->name('index');
@@ -45,4 +42,8 @@ Route::group(['prefix' => '/path', 'as' => 'path.'], function() {
     Route::get('/create', 'PathController@create')->name('create');
     Route::post('/store', 'PathController@store')->name('store');
     Route::delete('/delete/{path}', 'PathController@delete')->name('delete');
+});
+
+Route::group(['prefix' => '/slide', 'as' => 'slide.'], function() {
+    Route::get('/image/{slide}', 'SlideController@image')->name('image');
 });
