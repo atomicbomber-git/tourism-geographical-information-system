@@ -127,6 +127,24 @@
                                 <div class='invalid-feedback'>{{ get(this.error_data, 'errors.site_category_id[0]', false) }}</div>
                             </div>
 
+                            <div class='form-group'>
+                                <label for='description'> Deskripsi: </label>
+                                <textarea
+                                    v-model='description'
+                                    class='form-control'
+                                    :class="{'is-invalid': get(this.error_data, 'errors.description[0]', false)}"
+                                    type='text' id='description' placeholder='Deskripsi'></textarea>
+                                <div class='invalid-feedback'>{{ get(this.error_data, 'errors.description[0]', false) }}</div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="image"> Gambar: </label>
+                                <input
+                                    :class="{'is-invalid': get(this.error_data, 'errors.image[0]', false)}"
+                                    ref="image" type="file" class="form-control" name="image" accept="img/*">
+                                <div class='invalid-feedback'>{{ get(this.error_data, 'errors.image[0]', false) }}</div>
+                            </div>
+
                             <div class="form-group text-right">
                                 <button type="submit" class="btn btn-primary">
                                     Tambahkan Situs Wisata
@@ -182,8 +200,15 @@
             },
 
             formSubmitted(event) {
+
+                let data = new FormData()
+                Object.keys(this.form_data).forEach(key => {
+                    data.append(key, this.form_data[key])
+                })
+                data.append('image', this.$refs.image.files[0])
+
                 event.preventDefault()
-                axios.post(`/site/store`, this.form_data)
+                axios.post(`/site/store`, data, {headers: { 'Content-Type': 'multipart/form-data' }})
                     .then(response => { window.location.reload(true) })
                     .catch(error => { this.error_data = error.response.data })
             }
@@ -197,7 +222,7 @@
 
         data() {
             return {
-                map_zoom: parseInt(localStorage.gmap_zoom) || window.gmap_config.zoom,
+                map_zoom: parseInt(localStorage.gmap_zoom) || window.gmap_config.map.zoom,
 
                 map_center: {
                     lat: parseFloat(localStorage.gmap_center_lat) || window.gmap_config.map.center.lat,
@@ -222,7 +247,8 @@
                 visitor_count: null,
                 fee: null,
                 facility_count: null,
-                site_category_id: null
+                site_category_id: null,
+                description: ''
             }
         },
 
@@ -239,7 +265,8 @@
                     visitor_count: this.visitor_count,
                     fee: this.fee,
                     facility_count: this.facility_count,
-                    site_category_id: this.site_category_id
+                    site_category_id: this.site_category_id,
+                    description: this.description
                 }
             }
         }

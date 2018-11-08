@@ -8,5 +8,6 @@ $factory->define(App\Site::class, function (Faker $faker) {
         'fee' => rand(5, 25) * 10000,
         'facility_count' => rand(2, 12),
         'point_id' => factory(App\Point::class)->create(['type' => 'SITE'])->id,
+        'description' => $faker->paragraph
     ];
 });

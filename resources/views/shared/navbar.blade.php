@@ -71,8 +71,6 @@
                     </a>
                     <div class='dropdown-menu' aria-labelledby='site_category'>
                         <a class='dropdown-item' href='{{ route('site-category.index') }}'> Daftar Kategori </a>
-                    </div>
-                    <div class='dropdown-menu' aria-labelledby='site_category'>
                         <a class='dropdown-item' href='{{ route('site-category.create') }}'> Tambah Kategori </a>
                     </div>
                 </li>

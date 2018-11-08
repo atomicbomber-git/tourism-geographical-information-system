@@ -20,6 +20,7 @@ class CreateSitesTable extends Migration
             $table->integer('visitor_count')->unsigned();
             $table->decimal('fee', 19, 4)->unsigned();
             $table->integer('facility_count')->unsigned();
+            $table->text('description');
 
             $table->foreign('point_id')
                 ->references('id')

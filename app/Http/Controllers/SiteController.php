@@ -40,8 +40,6 @@ class SiteController extends Controller
 
     public function store()
     {
-        $site_category_ids = SiteCategory::select('id')->pluck('id');
-
         $data = $this->validate(request(), [
             'name' => 'required|string|unique:points',
             'latitude' => 'required|numeric',
@@ -49,7 +47,9 @@ class SiteController extends Controller
             'visitor_count' => 'required|numeric',
             'fee' => 'required|numeric',
             'facility_count' => 'required|numeric',
-            'site_category_id' => ['required', Rule::in($site_category_ids)]
+            'site_category_id' => 'required|exists:site_categories,id',
+            'description' => 'required|string|max:2000',
+            'image' => 'required|file|mimes:jpg,jpeg,svg,png'
         ]);
 
         DB::transaction(function() use($data) {
@@ -60,13 +60,17 @@ class SiteController extends Controller
                 'type' => 'SITE'
             ]);
 
-            Site::create([
+            $site = Site::create([
                 'point_id' => $point->id,
                 'visitor_count' => $data['visitor_count'],
                 'fee' => $data['fee'],
                 'facility_count' => $data['facility_count'],
-                'site_category_id' => $data['site_category_id']
+                'site_category_id' => $data['site_category_id'],
+                'description' => $data['description'],
             ]);
+
+            $site->addMediaFromRequest('image')
+                ->toMediaCollection(config('media.collections.images'));
         });
     }
 

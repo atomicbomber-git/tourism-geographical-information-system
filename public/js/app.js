@@ -50430,6 +50430,24 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -50467,8 +50485,14 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
         formSubmitted: function formSubmitted(event) {
             var _this = this;
 
+            var data = new FormData();
+            Object.keys(this.form_data).forEach(function (key) {
+                data.append(key, _this.form_data[key]);
+            });
+            data.append('image', this.$refs.image.files[0]);
+
             event.preventDefault();
-            axios.post('/site/store', this.form_data).then(function (response) {
+            axios.post('/site/store', data, { headers: { 'Content-Type': 'multipart/form-data' } }).then(function (response) {
                 window.location.reload(true);
             }).catch(function (error) {
                 _this.error_data = error.response.data;
@@ -50485,7 +50509,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
     },
     data: function data() {
         return {
-            map_zoom: parseInt(localStorage.gmap_zoom) || window.gmap_config.zoom,
+            map_zoom: parseInt(localStorage.gmap_zoom) || window.gmap_config.map.zoom,
 
             map_center: {
                 lat: parseFloat(localStorage.gmap_center_lat) || window.gmap_config.map.center.lat,
@@ -50510,7 +50534,8 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
             visitor_count: null,
             fee: null,
             facility_count: null,
-            site_category_id: null
+            site_category_id: null,
+            description: ''
         };
     },
 
@@ -50527,7 +50552,8 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
                 visitor_count: this.visitor_count,
                 fee: this.fee,
                 facility_count: this.facility_count,
-                site_category_id: this.site_category_id
+                site_category_id: this.site_category_id,
+                description: this.description
             };
         }
     }
@@ -50977,6 +51003,76 @@ var render = function() {
                         false
                       )
                     )
+                  )
+                ])
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "form-group" }, [
+                _c("label", { attrs: { for: "description" } }, [
+                  _vm._v(" Deskripsi: ")
+                ]),
+                _vm._v(" "),
+                _c("textarea", {
+                  directives: [
+                    {
+                      name: "model",
+                      rawName: "v-model",
+                      value: _vm.description,
+                      expression: "description"
+                    }
+                  ],
+                  staticClass: "form-control",
+                  class: {
+                    "is-invalid": _vm.get(
+                      this.error_data,
+                      "errors.description[0]",
+                      false
+                    )
+                  },
+                  attrs: {
+                    type: "text",
+                    id: "description",
+                    placeholder: "Deskripsi"
+                  },
+                  domProps: { value: _vm.description },
+                  on: {
+                    input: function($event) {
+                      if ($event.target.composing) {
+                        return
+                      }
+                      _vm.description = $event.target.value
+                    }
+                  }
+                }),
+                _vm._v(" "),
+                _c("div", { staticClass: "invalid-feedback" }, [
+                  _vm._v(
+                    _vm._s(
+                      _vm.get(this.error_data, "errors.description[0]", false)
+                    )
+                  )
+                ])
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "form-group" }, [
+                _c("label", { attrs: { for: "image" } }, [_vm._v(" Gambar: ")]),
+                _vm._v(" "),
+                _c("input", {
+                  ref: "image",
+                  staticClass: "form-control",
+                  class: {
+                    "is-invalid": _vm.get(
+                      this.error_data,
+                      "errors.image[0]",
+                      false
+                    )
+                  },
+                  attrs: { type: "file", name: "image", accept: "img/*" }
+                }),
+                _vm._v(" "),
+                _c("div", { staticClass: "invalid-feedback" }, [
+                  _vm._v(
+                    _vm._s(_vm.get(this.error_data, "errors.image[0]", false))
                   )
                 ])
               ]),
