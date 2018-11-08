@@ -28,7 +28,7 @@
                     <label for='password'> Kata Sandi: </label>
                 
                     <input
-                        id='password' name='password' type='text'
+                        id='password' name='password' type='password'
                         placeholder='Kata Sandi'
                         value='{{ old('password') }}'
                         class='form-control {{ !$errors->has('password') ?: 'is-invalid' }}'>

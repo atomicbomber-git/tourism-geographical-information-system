@@ -44,6 +44,15 @@ Route::group(['prefix' => '/path', 'as' => 'path.'], function() {
     Route::delete('/delete/{path}', 'PathController@delete')->name('delete');
 });
 
+Route::group(['prefix' => '/site-category', 'as' => 'site-category.'], function() {
+    Route::get('/index', 'SiteCategoryController@index')->name('index');
+    Route::get('/create', 'SiteCategoryController@create')->name('create');
+    Route::post('/store', 'SiteCategoryController@store')->name('store');
+    Route::get('/edit/{site_category}', 'SiteCategoryController@edit')->name('edit');
+    Route::post('/update/{site_category}', 'SiteCategoryController@update')->name('update');
+    Route::post('/delete/{site_category}', 'SiteCategoryController@delete')->name('delete');
+});
+
 Route::group(['prefix' => '/slide', 'as' => 'slide.'], function() {
     Route::get('/image/{slide}', 'SlideController@image')->name('image');
 });

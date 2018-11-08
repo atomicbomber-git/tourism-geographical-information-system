@@ -50,7 +50,7 @@
                     </div>
                 </li>
 
-                <li class='nav-item dropdown {{ Route::is('site_category.*') ? 'active' : '' }}'>
+                <li class='nav-item dropdown {{ Route::is('site-category.*') ? 'active' : '' }}'>
                     <a
                         class='nav-link dropdown-toggle' href='#' id='site_category' role='button'
                         data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>
@@ -58,7 +58,10 @@
                         Kategori Situs
                     </a>
                     <div class='dropdown-menu' aria-labelledby='site_category'>
-                        <a class='dropdown-item' href='#'> Daftar Kategori </a>
+                        <a class='dropdown-item' href='{{ route('site-category.index') }}'> Daftar Kategori </a>
+                    </div>
+                    <div class='dropdown-menu' aria-labelledby='site_category'>
+                        <a class='dropdown-item' href='{{ route('site-category.create') }}'> Tambah Kategori </a>
                     </div>
                 </li>
 
