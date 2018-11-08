@@ -6,7 +6,7 @@
     <div class="carousel-inner">
         @foreach ($slides as $slide)
         <div class="carousel-item {{ $loop->first ? 'active' : '' }}">
-            <img class="d-block w-100" style="height: 600px; object-fit: cover; filter: brightness(90%)" src="{{ route('slide.image', $slide) }}" alt="{{ $slide->name }}">
+            <img class="d-block w-100" style="height: 600px; object-fit: cover; filter: brightness(70%)" src="{{ route('slide.image', $slide) }}" alt="{{ $slide->name }}">
             <div class="carousel-caption d-none d-md-block">
                 <h5> {{ $slide->name }} </h5>
                 <p> {{ $slide->description }} </p>
@@ -24,12 +24,28 @@
     </a>
 </div>
 
-<div class="container my-5">
-    <p>
-        Lorem, ipsum dolor sit amet consectetur adipisicing elit. Corporis, adipisci sed dicta quos est temporibus corrupti in rerum explicabo sit voluptatem dolorem vel natus architecto illum suscipit unde neque omnis!
-    </p>
-    <p>
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam sint, deserunt maxime facere nulla voluptas vero deleniti officiis sapiente magni enim repellendus consectetur optio dignissimos vel numquam? Veniam, distinctio aliquid?
-    </p>
+<div class="container my-5 d-flex align-items-start">
+
+    <div id="app" class="mr-5" style="width: 50%">
+        <guest-map/>
+    </div>
+
+    <div style="width: 30rem">
+        <h1> Situs Pariwisata Bengkayang </h1>
+        <p class="lead">
+            Lorem ipsum dolor, sit amet consectetur adipisicing elit. Optio blanditiis asperiores unde dicta omnis a ea tempore alias adipisci doloremque ratione fugit, iste temporibus aspernatur! Consectetur veritatis harum dicta aliquam.
+        </p>
+        <p>
+            Lorem ipsum dolor, sit amet consectetur adipisicing elit. Tempora, ut corporis magni consequuntur ab praesentium cupiditate vero laborum. Maiores blanditiis tenetur nobis tempore laborum ipsa aut, odio ab rem numquam? Lorem ipsum dolor sit amet consectetur, adipisicing elit. Veritatis consequatur dolorem tempore, possimus animi hic deleniti neque provident, officiis ex ea id vel aut obcaecati ratione totam! Ratione, saepe vitae? Lorem ipsum dolor sit amet consectetur adipisicing elit. Molestiae at quia iure tenetur earum ullam rerum itaque? Unde, assumenda officiis tempore, molestiae laudantium omnis harum, aspernatur voluptas sunt quam molestias?
+        </p>
+
+        <p>
+            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Voluptatum, sunt cum doloribus eum perferendis omnis nobis voluptates cumque suscipit delectus veritatis obcaecati modi similique dolorem totam fugiat beatae sit minima.
+        </p>
+    </div>
+
 </div>
+
+@javascript('gmap_config', config('gmap_config'))
+@javascript('points', $points)
 @endsection

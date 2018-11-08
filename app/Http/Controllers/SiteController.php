@@ -38,6 +38,59 @@ class SiteController extends Controller
         return view('site.create', compact('points', 'categories'));
     }
 
+    public function edit(Site $site)
+    {
+        $points = Point::query()
+            ->select('id', 'name', 'latitude', 'longitude', 'type')
+            ->with('paths_from:point_a_id,point_b_id')
+            ->get()
+            ->keyBy('id');
+        
+        $categories = SiteCategory::select('id', 'name')
+            ->get();
+
+        $site->load('point');
+        return view('site.edit', compact('site', 'points', 'categories'));
+    }
+
+    public function update(Site $site)
+    {
+        $data = $this->validate(request(), [
+            'name' => ['required', 'string', Rule::unique('points')->ignore($site->point->id)],
+            'latitude' => 'required|numeric',
+            'longitude' => 'required|numeric',
+            'visitor_count' => 'required|numeric',
+            'fee' => 'required|numeric',
+            'facility_count' => 'required|numeric',
+            'site_category_id' => 'required|exists:site_categories,id',
+            'description' => 'required|string|max:2000',
+            'image' => 'nullable|file|mimes:jpg,jpeg,svg,png'
+        ]);
+
+        DB::transaction(function() use($data, $site) {
+            $site->point->update([
+                'name' => $data['name'],
+                'latitude' => $data['latitude'],
+                'longitude' => $data['longitude'],
+                'type' => 'SITE'
+            ]);
+
+            $site->update([
+                'visitor_count' => $data['visitor_count'],
+                'fee' => $data['fee'],
+                'facility_count' => $data['facility_count'],
+                'site_category_id' => $data['site_category_id'],
+                'description' => $data['description'],
+            ]);
+
+            if (!empty($data['image'])) {
+                $site->clearMediaCollection(config('media.collections.images'));
+                $site->addMediaFromRequest('image')
+                    ->toMediaCollection(config('media.collections.images'));
+            }
+        });
+    }
+
     public function store()
     {
         $data = $this->validate(request(), [
@@ -87,6 +140,20 @@ class SiteController extends Controller
 
         return back()
             ->with('message.success', __('messages.delete.success'));
+    }
+
+    public function image(Site $site)
+    {
+        $image = $site->getFirstMedia(config('media.collections.images'));
+        if (empty($image)) { abort(404); }
+        return response()->file($image->getPath());
+    }
+
+    public function thumbnail(Site $site)
+    {
+        $image = $site->getFirstMedia(config('media.collections.images'));
+        if (empty($image)) { abort(404); }
+        return response()->file($image->getPath(config('media.collections.thumbnails')));
     }
 
     public function map()

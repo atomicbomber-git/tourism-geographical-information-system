@@ -21,9 +21,13 @@ Route::get('/', 'HomeController@index')->name('home');
 Route::group(['prefix' => '/site', 'as' => 'site.'], function() {
     Route::get('/index', 'SiteController@index')->name('index');
     Route::get('/create', 'SiteController@create')->name('create');
+    Route::get('/edit/{site}', 'SiteController@edit')->name('edit');
+    Route::post('/update/{site}', 'SiteController@update')->name('update');
     Route::post('/store', 'SiteController@store')->name('store');
     Route::get('/map', 'SiteController@map')->name('map');
     Route::delete('/delete/{site}', 'SiteController@delete')->name('delete');
+    Route::get('/image/{site}', 'SiteController@image')->name('image');
+    Route::get('/thumbnail/{site}', 'SiteController@thumbnail')->name('thumbnail');
     Route::get('/analyze', 'AnalysisController@analyze')->name('analyze');
     Route::post('/analysis', 'AnalysisController@analysis')->name('analysis');
 });

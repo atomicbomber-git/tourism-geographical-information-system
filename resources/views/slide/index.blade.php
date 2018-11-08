@@ -15,9 +15,9 @@
         <div class="card-body" style="display:flex">
             @foreach ($slides as $slide)
             <div class='card d-inline-block mr-2' style="max-width: 18rem; height: 34; align-self:flex-start">
-                <img style="width: 18rem; height: 240px; object-fit: cover" class='card-img-top' src='{{ route('slide.image', $slide)  }}' alt='{{ $slide->name  }}'>
+                <img style="width: 18rem; height: 240px; object-fit: cover" class='card-img-top' src='{{ route('slide.image', $slide) . '?' . time() }}' alt='{{ $slide->name  }}'>
                 <div class='card-body' >
-                    <h5 class='card-title font-weight-bold'> {{ $slide->name  }} </h5>
+                    <h5 class='card-title font-weight-bold'> {{ $slide->name }} </h5>
                     <p class='card-text'>
                         {{ $slide->description  }}
                     </p>

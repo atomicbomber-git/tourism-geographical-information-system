@@ -49,6 +49,10 @@
                         <td> {{ number_format($point->site->fee, 0, ',', '.') }} </td>
                         <td> {{ $point->site->category->name }} </td>
                         <td>
+                            <a href="{{ route('site.edit', $point->site) }}" class="btn btn-dark btn-sm">
+                                <i class="fa fa-pencil"></i>
+                            </a>
+
                             <form action='{{ route('site.delete', $point->site) }}' method='POST' class='d-inline-block'>
                                 @method('DELETE')
                                 @csrf

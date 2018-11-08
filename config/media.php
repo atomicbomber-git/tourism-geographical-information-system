@@ -3,6 +3,7 @@
 return [
     'collections' => [
         'documents' => 'documents',
-        'images' => 'images'
+        'images' => 'images',
+        'thumbnails' => 'thumbnails'
     ]
 ];
