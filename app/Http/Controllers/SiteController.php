@@ -38,6 +38,16 @@ class SiteController extends Controller
         return view('site.create', compact('points', 'categories'));
     }
 
+    public function detail(Site $site)
+    {
+        $site->load([
+            'point:id,name',
+            'category:id,name'
+        ]);
+
+        return view('site.detail', compact('site'));
+    }
+
     public function edit(Site $site)
     {
         $points = Point::query()

@@ -15,8 +15,9 @@ class SiteSeeder extends Seeder
         $site_category_ids = SiteCategory::select('id')->pluck('id');
 
         foreach ($site_category_ids as $site_category_id) {
-            factory(App\Site::class, 2)->create(['site_category_id' => $site_category_id]);
+            factory(App\Site::class, 6)->create(['site_category_id' => $site_category_id])->each(function ($site) {
+                $site->addMedia(__DIR__ . '/lemukutan.png')->preservingOriginal()->toMediaCollection(config('media.collections.images'));
+            });
         }
-        
     }
 }

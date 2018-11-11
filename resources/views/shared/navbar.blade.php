@@ -85,6 +85,33 @@
                     </a>
                 </li>
 
+                @php
+
+                $site_categories = \App\SiteCategory::select('id', 'name')->get();
+
+                @endphp
+
+                <li class='nav-item dropdown {{ Route::is('site-category-item.*') ? 'active' : '' }}'>
+                    <a
+                        class='nav-link dropdown-toggle' href='#' id='site-category-item' role='button'
+                        data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>
+                        <i class='fa fa-tree'></i>
+                        Situs Wisata
+                    </a>
+                    <div class='dropdown-menu' aria-labelledby='site-category-item'>
+                        @foreach ($site_categories as $category)
+                        <a class='dropdown-item' href='{{ route('site-category-item.index', $category) }}'> {{ $category->name }} </a>
+                        @endforeach
+                    </div>
+                </li>
+
+                <li class='nav-item {{ Route::is('site.*') ? 'active' : '' }}'>
+                    <a class='nav-link' href='{{ route('site.analyze') }}'>
+                        <i class='fa fa-star'></i>
+                        Situs Terbaik
+                    </a>
+                </li>
+
                 @endguest
 
             </div>

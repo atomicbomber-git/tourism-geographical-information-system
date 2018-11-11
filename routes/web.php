@@ -21,6 +21,7 @@ Route::get('/', 'HomeController@index')->name('home');
 Route::group(['prefix' => '/site', 'as' => 'site.'], function() {
     Route::get('/index', 'SiteController@index')->name('index');
     Route::get('/create', 'SiteController@create')->name('create');
+    Route::get('/detail/{site}', 'SiteController@detail')->name('detail');
     Route::get('/edit/{site}', 'SiteController@edit')->name('edit');
     Route::post('/update/{site}', 'SiteController@update')->name('update');
     Route::post('/store', 'SiteController@store')->name('store');
@@ -55,6 +56,10 @@ Route::group(['prefix' => '/site-category', 'as' => 'site-category.'], function(
     Route::get('/edit/{site_category}', 'SiteCategoryController@edit')->name('edit');
     Route::post('/update/{site_category}', 'SiteCategoryController@update')->name('update');
     Route::post('/delete/{site_category}', 'SiteCategoryController@delete')->name('delete');
+});
+
+Route::group(['prefix' => '/site-category-item', 'as' => 'site-category-item.'], function() {
+    Route::get('/index/{site_category}', 'SiteCategoryItemController@index')->name('index');
 });
 
 Route::group(['prefix' => '/slide', 'as' => 'slide.'], function() {
