@@ -23,9 +23,9 @@
                                 :key="point.id">
                                 <GmapMarker
                                     :position="{lat: point.latitude, lng: point.longitude}"
-                                    :label="{ text: point.name, fontSize: '14pt', fontWeight: 'bold', color: 'black'}"
-                                    icon="/png/marker_blue.png"
-                                    >
+                                    :label="markerLabel(point)"
+                                    :icon="markerIcon(point)">
+
                                 </GmapMarker>
 
                                 <gmap-polyline
@@ -209,30 +209,18 @@
                 return deg * (Math.PI/180)
             },
 
-            // markerClick(point) {
-            //     if (this.start_point == null) {
-            //         this.start_point = point.id
-            //         return
-            //     }
+            markerIcon(point) {
+                switch (point.type) {
+                    case 'WAYPOINT':
+                        return window.gmap_config.marker.icons.default;
+                    case 'SITE':
+                        return window.gmap_config.marker.icons.site;
+                }
+            },
 
-            //     if (this.start_point == point.id) {
-            //         this.start_point = null
-            //     }
-
-            //     if (this.end_point == null) {
-            //         if (this.end_points.find(ep => ep.id == point.id) !== undefined) {
-            //             this.end_point = point.id
-            //         }
-            //         return
-            //     }
-
-            //     if (this.end_point == point.id) {
-            //         this.end_point = null
-            //     }
-
-            //     this.start_point = point.id
-            //     this.end_point = null
-            // },
+            markerLabel(point) {
+                return { text: point.name, ...window.gmap_config.marker.label }
+            },
         },
 
         data() {
@@ -244,7 +232,7 @@
                     lng: parseFloat(localStorage.gmap_center_lng) || 109.4806557
                 },
 
-                map_styles: window.gmap_styles,
+                map_styles: window.gmap_config.map.options.styles,
 
                 points: _.mapValues(window.init_points, point => {
                     return {

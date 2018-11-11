@@ -10,6 +10,7 @@
 </head>
 <body>
     @include('shared.navbar')
+    <div style="height: 3rem"></div>
     @yield('content')
     <script src="{{ asset('js/app.js') }}"></script>
 </body>
