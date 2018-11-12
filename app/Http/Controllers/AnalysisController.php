@@ -7,7 +7,7 @@ use App\Point;
 
 class AnalysisController extends Controller
 {
-    public function analysis()
+    public function result()
     {
         $data = $this->validate(request(), [
             'fee' => 'required|numeric',
@@ -50,6 +50,11 @@ class AnalysisController extends Controller
             ->with('site:point_id,fee,visitor_count,facility_count')
             ->get()
             ->keyBy('id');
+
+        foreach ($points as $point) {
+            $point->site["fee_original"] = $point->site["fee"];
+            $point->site["fee"] = 1 / $point->site["fee"];
+        }
 
         // Calculate local comparisons
         $local_comparisons = collect();
@@ -95,13 +100,31 @@ class AnalysisController extends Controller
             $local_priorities->put($aspect_key, $data);
         }
 
+
+
+        $overall_priorities = collect();
+        
+        foreach ($points as $point) {
+            $record = collect();
+            foreach ($aspects as $aspect_key => $aspect_name) {
+                $record->put($aspect_key,  
+                    $local_priorities[$aspect_key][$point->id]->average()
+                    * $aspect_priorities[$aspect_key]
+                );
+            }
+            $record["average"] = $record->average();
+            $overall_priorities[$point->id] = $record;
+        }
+
+        $overall_priorities = $overall_priorities->sortByDesc("average");
+
         return view(
-            'site.analysis',
-            compact('points', 'aspects', 'local_comparisons', 'local_comparison_sums', 'local_priorities', 'aspect_comparisons', 'aspect_comparison_sums', 'normalized_aspect_comparisons', 'aspect_priorities')
+            'site-analysis.result',
+            compact('points', 'overall_priorities', 'aspects', 'local_comparisons', 'local_comparison_sums', 'local_priorities', 'aspect_comparisons', 'aspect_comparison_sums', 'normalized_aspect_comparisons', 'aspect_priorities')
         );
     }
 
-    public function analyze()
+    public function create()
     {
         $aspects = [
             'fee' => 'Harga',
@@ -109,6 +132,6 @@ class AnalysisController extends Controller
             'facility_count' => 'J. Fasilitas'
         ];
 
-        return view('site.analyze', compact('aspects'));
+        return view('site-analysis.create', compact('aspects'));
     }
 }

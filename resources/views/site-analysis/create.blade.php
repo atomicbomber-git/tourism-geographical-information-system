@@ -21,6 +21,7 @@
                 
                     <input
                         id='visitor_count' name='visitor_count' type='number'
+                        min="1" max="10"
                         value='{{ old('visitor_count') }}'
                         placeholder='Prioritas Aspek J. Pengunjung:'
                         class='form-control {{ !$errors->has('visitor_count') ?: 'is-invalid' }}'>
@@ -35,6 +36,7 @@
                 
                     <input
                         id='fee' name='fee' type='number'
+                        min="1" max="10"
                         placeholder="Prioritas Aspek Harga Tiket Masuk"
                         value='{{ old('fee') }}'
                         class='form-control {{ !$errors->has('fee') ?: 'is-invalid' }}'>
@@ -49,6 +51,7 @@
                 
                     <input
                         id='facility_count' name='facility_count' type='number'
+                        min="1" max="10"
                         placeholder='Prioritas Aspek Jumlah Fasilitas'
                         value='{{ old('facility_count') }}'
                         class='form-control {{ !$errors->has('facility_count') ?: 'is-invalid' }}'>

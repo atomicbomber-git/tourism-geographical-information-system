@@ -58,7 +58,6 @@
                         <a class='dropdown-item' href='{{ route('site.index') }}'> Daftar Situs </a>
                         <a class='dropdown-item' href='{{ route('site.create') }}'> Tambah Situs </a>
                         <a class='dropdown-item' href='{{ route('site.map') }}'> Peta Rute </a>
-                        <a class='dropdown-item' href='{{ route('site.analyze') }}'> Situs Terfavorit </a>
                     </div>
                 </li>
 
@@ -76,6 +75,13 @@
                 </li>
 
                 @endauth
+
+                <li class='nav-item {{ Route::is('site-analysis.*') ? 'active' : '' }}'>
+                    <a class='nav-link' href='{{ route('site-analysis.create') }}'>
+                        <i class='fa fa-star'></i>
+                        Situs Wisata Terbaik
+                    </a>
+                </li>
 
                 @guest
                 <li class='nav-item {{ Route::is('site.*') ? 'active' : '' }}'>
@@ -103,13 +109,6 @@
                         <a class='dropdown-item' href='{{ route('site-category-item.index', $category) }}'> {{ $category->name }} </a>
                         @endforeach
                     </div>
-                </li>
-
-                <li class='nav-item {{ Route::is('site.*') ? 'active' : '' }}'>
-                    <a class='nav-link' href='{{ route('site.analyze') }}'>
-                        <i class='fa fa-star'></i>
-                        Situs Terbaik
-                    </a>
                 </li>
 
                 @endguest

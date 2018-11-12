@@ -29,8 +29,11 @@ Route::group(['prefix' => '/site', 'as' => 'site.'], function() {
     Route::delete('/delete/{site}', 'SiteController@delete')->name('delete');
     Route::get('/image/{site}', 'SiteController@image')->name('image');
     Route::get('/thumbnail/{site}', 'SiteController@thumbnail')->name('thumbnail');
-    Route::get('/analyze', 'AnalysisController@analyze')->name('analyze');
-    Route::post('/analysis', 'AnalysisController@analysis')->name('analysis');
+});
+
+Route::group(['prefix' => '/site-analysis', 'as' => 'site-analysis.'], function() {
+    Route::get('/create', 'AnalysisController@create')->name('create');
+    Route::post('/result', 'AnalysisController@result')->name('result');
 });
 
 Route::group(['prefix' => '/waypoint', 'as' => 'waypoint.'], function() {
