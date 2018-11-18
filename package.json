@@ -21,6 +21,7 @@
     },
     "dependencies": {
         "font-awesome": "^4.7.0",
+        "vue-select": "^2.5.1",
         "vue2-google-maps": "^0.10.2"
     }
 }

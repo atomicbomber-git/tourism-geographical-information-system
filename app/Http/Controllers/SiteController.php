@@ -24,6 +24,20 @@ class SiteController extends Controller
         return view('site.index', compact('points'));
     }
 
+    public function search()
+    {
+        $keyword = request('keyword');
+
+        return Point::isSite()
+            ->select('name', 'id')
+            ->where('name', 'LIKE', "%{$keyword}%")
+            ->with([
+                'site:id,point_id,site_category_id',
+                'site.category:id,name',
+            ])
+            ->get();
+    }
+
     public function create()
     {
         $points = Point::query()

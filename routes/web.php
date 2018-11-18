@@ -21,6 +21,7 @@ Route::get('/', 'HomeController@index')->name('home');
 Route::group(['prefix' => '/site', 'as' => 'site.'], function() {
     Route::get('/index', 'SiteController@index')->name('index');
     Route::get('/create', 'SiteController@create')->name('create');
+    Route::get('/search', 'SiteController@search')->name('search');
     Route::get('/detail/{site}', 'SiteController@detail')->name('detail');
     Route::get('/edit/{site}', 'SiteController@edit')->name('edit');
     Route::post('/update/{site}', 'SiteController@update')->name('update');
