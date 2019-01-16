@@ -52,22 +52,22 @@
                                 <div class='form-group col-md-6'>
                                     <label for='latitude'> Latitude: </label>
                                     <input
-                                        readonly
-                                        v-model='points[waypoint.id].latitude'
+                                        v-model.number='points[waypoint.id].latitude'
                                         class='form-control'
+                                        step="any"
                                         :class="{'is-invalid': get(this.error_data, 'errors.latitude[0]', false)}"
-                                        type='text' id='latitude' placeholder='Latitude'>
+                                        type='number' id='latitude' placeholder='Latitude'>
                                     <div class='invalid-feedback'>{{ get(this.error_data, 'errors.latitude[0]', false) }}</div>
                                 </div>
 
                                 <div class='form-group col-md-6'>
                                     <label for='longitude'> Longitude: </label>
                                     <input
-                                        readonly
-                                        v-model='points[waypoint.id].longitude'
+                                        v-model.number='points[waypoint.id].longitude'
                                         class='form-control'
+                                        step="any"
                                         :class="{'is-invalid': get(this.error_data, 'errors.longitude[0]', false)}"
-                                        type='text' id='longitude' placeholder='Longitude'>
+                                        type='number' id='longitude' placeholder='Longitude'>
                                     <div class='invalid-feedback'>{{ get(this.error_data, 'errors.longitude[0]', false) }}</div>
                                 </div>
                             </div>
