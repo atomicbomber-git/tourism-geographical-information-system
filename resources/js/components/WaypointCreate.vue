@@ -58,6 +58,7 @@
                                         v-model.number='latitude'
                                         class='form-control'
                                         :class="{'is-invalid': get(this.error_data, 'errors.latitude[0]', false)}"
+                                        step="any"
                                         type='number' id='latitude' placeholder='Latitude'>
                                     <div class='invalid-feedback'>{{ get(this.error_data, 'errors.latitude[0]', false) }}</div>
                                 </div>
@@ -68,6 +69,7 @@
                                         v-model.number='longitude'
                                         class='form-control'
                                         :class="{'is-invalid': get(this.error_data, 'errors.longitude[0]', false)}"
+                                        step="any"
                                         type='number' id='longitude' placeholder='Longitude'>
                                     <div class='invalid-feedback'>{{ get(this.error_data, 'errors.longitude[0]', false) }}</div>
                                 </div>
