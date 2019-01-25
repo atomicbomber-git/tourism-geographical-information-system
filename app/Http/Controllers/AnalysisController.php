@@ -69,7 +69,9 @@ class AnalysisController extends Controller
                 $comparisons = collect();
 
                 foreach ($points as $another_point) {
-                    $comparison = $point->site->$aspect_key / $another_point->site->$aspect_key;
+
+                    $another_site_val = $another_point->site->$aspect_key != 0 ? $another_point->site->$aspect_key : 0.000000001;
+                    $comparison = $point->site->$aspect_key / $another_site_val;
                     $comparisons->put($another_point->id, $comparison);
                     $sums->put($another_point->id, $comparison + ($sums[$another_point->id] ?? 0));
                 }
