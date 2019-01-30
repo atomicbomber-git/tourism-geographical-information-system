@@ -53,7 +53,7 @@ class AnalysisController extends Controller
 
         foreach ($points as $point) {
             $point->site["fee_original"] = $point->site["fee"];
-            $point->site["fee"] = 1 / $point->site["fee"];
+            $point->site["fee"] = 1 / ($point->site["fee"] != 0 ? $point->site["fee"] : 0.00000001);
         }
 
         // Calculate local comparisons
