@@ -22,6 +22,7 @@
                                 v-for="point in points"
                                 :key="point.id">
                                 <GmapMarker
+                                    @click="onPointMarkerClick(point)"
                                     :position="{lat: point.latitude, lng: point.longitude}"
                                     :label="markerLabel(point)"
                                     :icon="markerIcon(point)">
@@ -47,7 +48,7 @@
                     <div class="card-body">
                         <div class="form-group">
                             <label> Lokasi Asal: </label>
-                            <select @change="update_track" v-model="start_point" class="form-control form-control-sm">
+                            <select v-model="start_point" class="form-control form-control-sm">
                                 <option v-for="point in points" :key="point.id" :value="point.id">
                                     {{ point.name }}
                                 </option>
@@ -56,7 +57,7 @@
 
                         <div class="form-group">
                             <label> Lokasi Tujuan: </label>
-                            <select @change="update_track" v-model="finish_point" class="form-control form-control-sm">
+                            <select v-model="finish_point" class="form-control form-control-sm">
                                 <option v-for="point in points" :key="point.id" :value="point.id">
                                     {{ point.name }}
                                 </option>
@@ -70,7 +71,7 @@
                         <i class="fa fa-road"></i>
                         Jalur Terbaik
                     </div>
-                    <div class="card-body">
+                    <div class="card-body" style="max-height: 20rem; overflow-y: scroll">
                         <div class="list-group list-group-flush">
                             <div class="list-group-item" v-for="point in track" :key="point.id">
                                 <h5> {{ point.name }} </h5>
@@ -98,6 +99,20 @@
         },
 
         methods: {
+            onPointMarkerClick(point) {
+                if (this.start_point == null) {
+                    this.start_point = point.id
+                }
+                else if (this.finish_point == null) {
+                    this.finish_point = point.id
+                }
+                else {
+                    this.start_point = null
+                    this.finish_point = null
+                    this.start_point = point.id
+                }
+            },
+
             saveZoom() {
                 window.localStorage.setItem('gmap_zoom', this.map.getZoom())
             },
@@ -109,6 +124,10 @@
 
             update_track()
             {
+                if ((this.start_point == null) || (this.finish_point == null)) {
+                    return
+                }
+
                 this.points = _.mapValues(this.points, point => {
                     return {
                         ...point,
@@ -129,12 +148,22 @@
                 start.visited = true
                 let current_point = start
 
+                // console.log(`Mencari rute terbaik dari titik "${start.name}" ke "${finish.name}"\n`)
+
                 let visit = point => {
                     
                     let visitable_paths = point.paths.filter(path => {
                         return !this.points[path.id].visited
                     })
 
+                    console.log(`Mengunjungi titik "${point.name}"`)
+
+                    let visitable_path_names = visitable_paths
+                        .map(path => `"${this.points[path.id].name}"`)
+                        .join(", ")
+
+                    console.log("Titik-titik tetangga: " + visitable_path_names)
+                    
                     visitable_paths.forEach(path => {
                         
                         let another_point = this.points[path.id]
@@ -145,10 +174,17 @@
                             another_point.latitude, another_point.longitude
                         )
 
+                        console.log(`Jarak sebenarnya antara titik ini dengan titik "${another_point.name}": ${dist} KM`)
+                        console.log(`Jarak sementara titik ini: ${this.tentative_dist} KM`)
+                        console.log(`Jarak sementara titik "${another_point.name}": "${another_point.tentative_dist}" KM`)
+
                         if (point.tentative_dist + dist < another_point.tentative_dist) {
                             another_point.tentative_dist = point.tentative_dist + dist 
                             another_point.prev_point = point.id
+                            console.log(`Karena jarak sementara titik ini + jarak sebenarnya antar titik ini dengan titik "${another_point.name} (${point.tentative_dist + dist} KM)" < Jarak sementara titik "${another_point.name}", maka jarak sementara titik "${another_point.name}" diubah menjadi ${point.tentative_dist + dist} KM`)
+                            console.log(`Titik sebelumnya dari titik "${another_point.name}" diubah menjadi "${point.name}"`)
                         }
+
                     })
                     
                     point.visited = true
@@ -161,10 +197,17 @@
                         .map(key => { return {id: key, ...this.points[key]} })
                         .filter(point => !point.visited)
                         .sort((point_a, point_b) => point_a.tentative_dist - point_b.tentative_dist)
+                    
+                    let visitable_names = visitables.map(point => `"${point.name}"`).join(", ")
+
+                    console.log("Titik-titik yang belum dikunjungi, diurutkan berdasarkan jarak sementara dari yang terdekat hingga yang terjauh: ")
+                    console.log(visitable_names)
 
                     if (visitables.length == 0) {
                         break
                     }
+
+                    console.log("");
 
                     current_point = this.points[visitables[0].id]
                 }
@@ -178,6 +221,8 @@
                     if (current.prev_point == null) { break }
                     current = this.points[current.prev_point]
                 }
+                console.log("Rute (Dihitung mulai dari titik tujuan): ")
+                console.log(this.track.map(point => `"${point.name}"`).join(", "))
 
                 this.track = _.reverse(this.track)
             },
@@ -221,6 +266,20 @@
             markerLabel(point) {
                 return { text: point.name, ...window.gmap_config.marker.label }
             },
+        },
+
+        watch: {
+            start_point: function() {
+                if ((this.start_point != null) && (this.finish_point != null)) {
+                    this.update_track()
+                }
+            },
+
+            finish_point: function() {
+                if ((this.start_point != null) && (this.finish_point != null)) {
+                    this.update_track()
+                }
+            }
         },
 
         data() {
