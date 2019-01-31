@@ -53,7 +53,7 @@ class AnalysisController extends Controller
 
         foreach ($points as $point) {
             $point->site["fee_original"] = $point->site["fee"];
-            $point->site["fee"] = 1 / ($point->site["fee"] != 0 ? $point->site["fee"] : 0.00000001);
+            $point->site["fee"] = 1 / ($point->site["fee"] != 0 ? $point->site["fee"] : 1);
         }
 
         // Calculate local comparisons
@@ -70,7 +70,7 @@ class AnalysisController extends Controller
 
                 foreach ($points as $another_point) {
 
-                    $another_site_val = $another_point->site->$aspect_key != 0 ? $another_point->site->$aspect_key : 0.000000001;
+                    $another_site_val = ($another_point->site->$aspect_key != 0 ? $another_point->site->$aspect_key : 1);
                     $comparison = $point->site->$aspect_key / $another_site_val;
                     $comparisons->put($another_point->id, $comparison);
                     $sums->put($another_point->id, $comparison + ($sums[$another_point->id] ?? 0));
@@ -101,7 +101,6 @@ class AnalysisController extends Controller
 
             $local_priorities->put($aspect_key, $data);
         }
-
 
 
         $overall_priorities = collect();
