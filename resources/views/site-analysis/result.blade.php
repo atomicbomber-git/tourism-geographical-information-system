@@ -76,7 +76,7 @@
                         @foreach ($normalized_aspect_comparisons as $aspect_key => $comparisons)
                         <th> {{ $aspects[$aspect_key] }} </th>
                         @endforeach
-                        <th> Prioritas </th>
+                        <th> Rata-Rata Prioritas </th>
                     </tr>
                     @foreach ($normalized_aspect_comparisons as $aspect_key_r => $priorities)
                     <tr>
@@ -228,7 +228,7 @@
                         <tr>
                             <td> {{ $loop->iteration }}. </td>
                             <td> {{ $points[$point_id]->name }} </td>
-                            <td> @number_format($priority["average"]) </td>
+                            <td> @number_format($priority["sum"]) </td>
                         </tr>
                        @endforeach
                    </tbody>

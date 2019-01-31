@@ -113,11 +113,12 @@ class AnalysisController extends Controller
                     * $aspect_priorities[$aspect_key]
                 );
             }
-            $record["average"] = $record->average();
+            $record["sum"] = $record->sum();
             $overall_priorities[$point->id] = $record;
         }
 
-        $overall_priorities = $overall_priorities->sortByDesc("average");
+        $overall_priorities = $overall_priorities->sortByDesc("sum");
+        // return $overall_priorities;
 
         return view(
             'site-analysis.result',
