@@ -1,5 +1,26 @@
 @extends('shared.layout')
 @section('title', 'Situs Wisata Terbaik')
+
+@section('extra-head-content')
+<style>
+    * {
+        font-size: 0.85rem;
+    }
+    
+    .card {
+        margin-bottom: 2rem;
+    }
+
+    .container {
+        max-width: 90%;
+    }
+
+    .table-sm td, .table-sm th {
+        padding: 1px;
+    }
+</style>
+@endsection
+
 @section('content')
 <div class="container mt-5">
     <h1 class="mb-5">
