@@ -7,28 +7,48 @@
         Kelola Gambar Slide
     </h1>
 
+    <div class="my-4">
+        <a href="{{ route('slide.create') }}" class="btn btn-dark">
+            Tambah Slide
+            <i class="fa fa-plus"></i>
+        </a>
+    </div>
+
+    @include('shared.message', ['session_key' => 'message.success', 'state' => 'success'])
+
     <div class="card">
         <div class="card-header">
             <i class="fa fa-picture-o"></i>
             Kelola Gambar Slide
         </div>
-        <div class="card-body" style="display:flex">
-            @foreach ($slides as $slide)
-            <div class='card d-inline-block mr-2' style="max-width: 18rem; height: 34; align-self:flex-start">
-                <img style="width: 18rem; height: 240px; object-fit: cover" class='card-img-top' src='{{ route('slide.image', $slide) . '?' . time() }}' alt='{{ $slide->name  }}'>
-                <div class='card-body' >
-                    <h5 class='card-title font-weight-bold'> {{ $slide->name }} </h5>
-                    <p class='card-text'>
-                        {{ $slide->description  }}
-                    </p>
-                    <div class="text-right" style="bottom: 0px">
-                        <a href="{{ route('slide.edit', $slide) }}" class="btn btn-dark btn-sm">
-                            <i class="fa fa-pencil"></i>
-                        </a>
+        <div class="card-body">
+            <div class="row">
+                @foreach ($slides as $slide)
+                    <div class="col-md-4">
+                        <div class='card mr-2 mb-4'>
+                            <img style="height: 240px; object-fit: cover" class='card-img-top' src='{{ route('slide.image', $slide) . '?' . time() }}' alt='{{ $slide->name  }}'>
+                            <div class='card-body' >
+                                <h5 class='card-title font-weight-bold'> {{ $slide->name }} </h5>
+                                <p class='card-text'>
+                                    {{ $slide->description  }}
+                                </p>
+                                <div class="text-right" style="bottom: 0px">
+                                    <form action='{{ route('slide.delete', $slide) }}' method='POST' class='d-inline-block'>
+                                        @csrf
+                                        <button type='submit' class='btn btn-danger btn-sm'>
+                                            <i class='fa fa-trash'></i>
+                                        </button>
+                                    </form>
+
+                                    <a href="{{ route('slide.edit', $slide) }}" class="btn btn-dark btn-sm">
+                                        <i class="fa fa-pencil"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                </div>
+                @endforeach
             </div>
-            @endforeach
         </div>
     </div>
 </div>

@@ -68,6 +68,9 @@ Route::group(['prefix' => '/site-category-item', 'as' => 'site-category-item.'],
 
 Route::group(['prefix' => '/slide', 'as' => 'slide.'], function() {
     Route::get('/index', 'SlideController@index')->name('index');
+    Route::get('/create', 'SlideController@create')->name('create');
+    Route::post('/store', 'SlideController@store')->name('store');
+    Route::post('/delete/{slide}', 'SlideController@delete')->name('delete');
     Route::get('/edit/{slide}', 'SlideController@edit')->name('edit');
     Route::post('/update/{slide}', 'SlideController@update')->name('update');
     Route::get('/image/{slide}', 'SlideController@image')->name('image');
