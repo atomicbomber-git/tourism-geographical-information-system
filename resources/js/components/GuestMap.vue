@@ -3,7 +3,7 @@
         :zoom="map_zoom"
         :center="map_center"
         :options="{ styles: map_styles }"
-        :style="map_style"
+        :style="{'padding-top': '100%', 'width': '100%', 'border': 'thin solid black'}"
         @zoom_changed="zoomChanged"
         @center_changed="centerChanged"
         @click="mapClicked"
