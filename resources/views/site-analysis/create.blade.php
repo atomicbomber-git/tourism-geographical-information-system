@@ -16,6 +16,12 @@
            <form action="{{ route('site-analysis.result') }}" method="POST">
                @csrf
 
+                <div class="alert alert-info">
+                    <i class="fa fa-info"></i>
+                    Mohon masukkan nilai dengan rentang <strong>
+                            1-10 </strong> untuk kolom-kolom dibawah ini.
+                </div>
+
                 <div class='form-group'>
                     <label for='visitor_count'> Prioritas Aspek J. Pengunjung: </label>
                 
@@ -25,6 +31,9 @@
                         value='{{ old('visitor_count') }}'
                         placeholder='Prioritas Aspek J. Pengunjung:'
                         class='form-control {{ !$errors->has('visitor_count') ?: 'is-invalid' }}'>
+
+                    <small class="form-text text-muted"> Nilai melambangkan seberapa tingginya prioritas aspek jumlah pengunjung tahunan ke situs wisata bagi Anda. </small>
+
                 
                     <div class='invalid-feedback'>
                         {{ $errors->first('visitor_count') }}
@@ -40,6 +49,8 @@
                         placeholder="Prioritas Aspek Harga Tiket Masuk"
                         value='{{ old('fee') }}'
                         class='form-control {{ !$errors->has('fee') ?: 'is-invalid' }}'>
+
+                    <small class="form-text text-muted"> Nilai melambangkan seberapa tingginya prioritas aspek murahnya harga tiket masuk ke situs wisata bagi Anda. </small>
                 
                     <div class='invalid-feedback'>
                         {{ $errors->first('fee') }}
@@ -55,6 +66,8 @@
                         placeholder='Prioritas Aspek Jumlah Fasilitas'
                         value='{{ old('facility_count') }}'
                         class='form-control {{ !$errors->has('facility_count') ?: 'is-invalid' }}'>
+
+                    <small class="form-text text-muted"> Nilai melambangkan seberapa tingginya prioritas aspek jumlah fasilitas yang tersedia pada situs wisata bagi Anda. </small>
                 
                     <div class='invalid-feedback'>
                         {{ $errors->first('facility_count') }}

@@ -47,7 +47,7 @@ class AnalysisController extends Controller
         $points = Point::query()
             ->isSite()
             ->select('id', 'name')
-            ->with('site:point_id,fee,visitor_count,facility_count')
+            ->with('site:id,point_id,fee,visitor_count,facility_count')
             ->get()
             ->keyBy('id');
 

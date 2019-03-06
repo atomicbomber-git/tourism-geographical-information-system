@@ -227,7 +227,10 @@
                        @foreach ($overall_priorities as $point_id => $priority)
                         <tr>
                             <td> {{ $loop->iteration }}. </td>
-                            <td> {{ $points[$point_id]->name }} </td>
+                            <td>
+                                <a href="{{ route("site.detail", $points[$point_id]->site->id) }}">
+                                    {{ $points[$point_id]->name }} </td>
+                                </a>
                             <td> @number_format($priority["sum"]) </td>
                         </tr>
                        @endforeach
