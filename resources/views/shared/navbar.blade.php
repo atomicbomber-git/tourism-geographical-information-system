@@ -1,6 +1,15 @@
 <nav class="navbar navbar-dark bg-dark navbar-expand-lg navbar-light bg-light fixed-top">
     <div class="container">
-        <a class="navbar-brand" href="{{ route('home') }}"> {{ config('app.name') }} </a>
+        {{-- <a class="navbar-brand" href="{{ route('home') }}"> {{ config('app.name') }} </a> --}}
+
+        <a class="navbar-brand" href="{{ route("home") }}">
+            <img src={{ asset("bengkayang.png") }} width="30" height="auto" alt="">
+
+            <span  class="ml-2">
+                {{ config("app.name") }}
+            </span>
+        </a>
+
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
@@ -129,3 +138,7 @@
         </div>
     </div>
 </nav>
+
+<div style="height: 20dp">
+
+</div>
