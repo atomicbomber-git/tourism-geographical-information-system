@@ -220,7 +220,7 @@
                         <tr>
                             <th> # </th>
                             <th class="text-center"> Nama </th>
-                            <th class="text-center"> Nilai </th>
+                            <th class="text-center"> Gambar </th>
                         </tr>
                    </thead>
                    <tbody>
