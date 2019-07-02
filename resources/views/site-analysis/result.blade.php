@@ -219,19 +219,25 @@
                    <thead class="thead thead-dark">
                         <tr>
                             <th> # </th>
-                            <th> Nama </th>
-                            <th> Nilai </th>
+                            <th class="text-center"> Nama </th>
+                            <th class="text-center"> Nilai </th>
                         </tr>
                    </thead>
                    <tbody>
                        @foreach ($overall_priorities as $point_id => $priority)
                         <tr>
                             <td> {{ $loop->iteration }}. </td>
-                            <td>
+                            <td class="text-center">
                                 <a href="{{ route("site.detail", $points[$point_id]->site->id) }}">
                                     {{ $points[$point_id]->name }} </td>
                                 </a>
-                            <td> @number_format($priority["sum"]) </td>
+                            <td class="text-center">
+                                <a href="{{ route("site.detail", $points[$point_id]->site->id) }}">
+                                    <img
+                                        style="width: 320px; height: 240px; object-fit: cover"
+                                        src="{{ route('site.thumbnail', $points[$point_id]->site) }}" alt="{{ $points[$point_id]->site->name }}">
+                                </a>
+                            </td>
                         </tr>
                        @endforeach
                    </tbody>

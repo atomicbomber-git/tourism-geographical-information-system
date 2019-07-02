@@ -10,14 +10,14 @@ class AnalysisController extends Controller
     public function result()
     {
         $data = $this->validate(request(), [
-            'fee' => 'required|numeric',
             'visitor_count' => 'required|numeric',
+            'fee' => 'required|numeric',
             'facility_count' => 'required|numeric',
         ]);
 
         $aspects = [
-            'fee' => 'Harga',
             'visitor_count' => 'J. Pengunjung',
+            'fee' => 'Harga',
             'facility_count' => 'J. Fasilitas'
         ];
 
@@ -27,7 +27,7 @@ class AnalysisController extends Controller
         foreach ($data as $key_h => $value_h) {
             $aspect_comparisons[$key_h] = collect();
             foreach ($data as $key_r => $value_r) {
-                $ratio = $value_h / $value_r;
+                $ratio = $value_r / $value_h;
                 $aspect_comparisons[$key_h][$key_r] = $ratio;
                 $aspect_comparison_sums[$key_r] = ($aspect_comparison_sums[$key_r] ?? 0) + $ratio;
             }
