@@ -226,15 +226,15 @@
                    <tbody>
                        @foreach ($overall_priorities as $point_id => $priority)
                         <tr>
-                            <td> {{ $loop->iteration }}. </td>
-                            <td class="text-center">
+                            <td class="align-middle"> {{ $loop->iteration }}. </td>
+                            <td class="text-center align-middle">
                                 <a href="{{ route("site.detail", $points[$point_id]->site->id) }}">
                                     {{ $points[$point_id]->name }} </td>
                                 </a>
-                            <td class="text-center">
+                            <td class="text-center align-middle">
                                 <a href="{{ route("site.detail", $points[$point_id]->site->id) }}">
                                     <img
-                                        style="width: 320px; height: 240px; object-fit: cover"
+                                        style="width: 160px; height: 120px; object-fit: cover"
                                         src="{{ route('site.thumbnail', $points[$point_id]->site) }}" alt="{{ $points[$point_id]->site->name }}">
                                 </a>
                             </td>
