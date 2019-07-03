@@ -215,6 +215,32 @@
         </div>
         <div class="card-body">
             <div class='table-responsive'>
+                @auth
+
+                <table class='table table-sm table-bordered'>
+                   <thead class="thead thead-dark">
+                        <tr>
+                            <th> # </th>
+                            <th> Nama </th>
+                            <th> Nilai </th>
+                        </tr>
+                   </thead>
+                   <tbody>
+                       @foreach ($overall_priorities as $point_id => $priority)
+                        <tr>
+                            <td> {{ $loop->iteration }}. </td>
+                            <td>
+                                <a href="{{ route("site.detail", $points[$point_id]->site->id) }}">
+                                    {{ $points[$point_id]->name }} </td>
+                                </a>
+                            <td> @number_format($priority["sum"]) </td>
+                        </tr>
+                       @endforeach
+                   </tbody>
+                </table>
+
+                @else
+
                 <table class='table table-sm table-bordered'>
                    <thead class="thead thead-dark">
                         <tr>
@@ -242,6 +268,8 @@
                        @endforeach
                    </tbody>
                 </table>
+
+                @endauth
             </div>
         </div>
     </div>
