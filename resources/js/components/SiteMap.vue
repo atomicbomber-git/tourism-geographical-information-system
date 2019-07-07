@@ -128,86 +128,82 @@
                     return
                 }
 
+                this.dijkstra(this.points[this.start_point], this.points[this.end_point])
+            },
+
+            dijkstra(start, finish) {
+                /* Mereset ulang semua nilai titik yang ada */
                 this.points = _.mapValues(this.points, point => {
                     return {
                         ...point,
-                        // For Dijkstra purpose
-                        visited: false,
-                        tentative_dist: Infinity,
+                        visited: false,  /* Seluruh titik diset menjadi 'belum dikunjungi' */
+                        tentative_dist: Infinity, /* Jarak sementara seluruh titik diset menjadi tidak terhingga */
                         is_in_track: false,
                         prev_point: null
                     }
                 })
 
-                this.dijkstra(this.points[this.start_point], this.points[this.end_point])
-            },
-
-            dijkstra(start, finish) {
-                // Reset
+                /* Set nilai jarak sementara titik awal menjadi 0 */
                 start.tentative_dist = 0
+                /* Menandai titik awal sebagai titik yang telah dikunjungi */
                 start.visited = true
+                /* Menandai titik awal sebagai titik yang akan dipertimbangkan sekarang */
                 let current_point = start
 
-                // console.log(`Mencari rute terbaik dari titik "${start.name}" ke "${finish.name}"\n`)
-
+                /* Deskripsi prosedur pengunjungan sebuah titik */
                 let visit = point => {
-                    
+                    /*
+                        Mengambil data jalur-jalur yang dapat dikunjungi dari titik sekarang
+                    */
                     let visitable_paths = point.paths.filter(path => {
                         return !this.points[path.id].visited
                     })
-
-                    console.log(`Mengunjungi titik "${point.name}"`)
-
-                    let visitable_path_names = visitable_paths
-                        .map(path => `"${this.points[path.id].name}"`)
-                        .join(", ")
-
-                    console.log("Titik-titik tetangga: " + visitable_path_names)
                     
+                   /* Mengunjungi setiap titik yang terdapat pada ujung jalur */ 
                     visitable_paths.forEach(path => {
                         
                         let another_point = this.points[path.id]
                         
-                        // Calculate distance
+                        /* Menghitung jarak titik yang sekarang dengan titik lainnya dengan rumus haversin */
                         const dist = this.haversineDist(
                             point.latitude, point.longitude,
                             another_point.latitude, another_point.longitude
                         )
 
-                        console.log(`Jarak sebenarnya antara titik ini dengan titik "${another_point.name}": ${dist} KM`)
-                        console.log(`Jarak sementara titik ini: ${this.tentative_dist} KM`)
-                        console.log(`Jarak sementara titik "${another_point.name}": "${another_point.tentative_dist}" KM`)
-
+                        /*
+                            Jika jarak sementara titik sekarang + panjang jalur < jarak sementara titik lainnya,
+                            maka jarak sementara titk lainnya diganti menjadi jarak sementara titik
+                            sekarang + panjang jalur
+                        */
                         if (point.tentative_dist + dist < another_point.tentative_dist) {
                             another_point.tentative_dist = point.tentative_dist + dist 
+
+                            /* Menandai titik sekarang sebagai 'titik sebelumnya' dari titik lainnya */
                             another_point.prev_point = point.id
-                            console.log(`Karena jarak sementara titik ini + jarak sebenarnya antar titik ini dengan titik "${another_point.name} (${point.tentative_dist + dist} KM)" < Jarak sementara titik "${another_point.name}", maka jarak sementara titik "${another_point.name}" diubah menjadi ${point.tentative_dist + dist} KM`)
-                            console.log(`Titik sebelumnya dari titik "${another_point.name}" diubah menjadi "${point.name}"`)
                         }
 
                     })
                     
+                    /* Tandai titik sebagai telah dikunjungi */
                     point.visited = true
                 }
 
                 while (true) {
+                    /* Memulai proses pengunjungan titik */
                     visit(current_point)
 
+                    /*
+                        Menentukan titik selanjutnya yang harus dipertimbangkan dari daftar seluruh titik yang belum dikunjungi
+                    */
                     let visitables = Object.keys(this.points)
                         .map(key => { return {id: key, ...this.points[key]} })
                         .filter(point => !point.visited)
                         .sort((point_a, point_b) => point_a.tentative_dist - point_b.tentative_dist)
                     
-                    let visitable_names = visitables.map(point => `"${point.name}"`).join(", ")
-
-                    console.log("Titik-titik yang belum dikunjungi, diurutkan berdasarkan jarak sementara dari yang terdekat hingga yang terjauh: ")
-                    console.log(visitable_names)
-
+                    /* Jika tidak ada lagi titik yang dapat dikunjungi, berhenti */
                     if (visitables.length == 0) {
                         break
                     }
-
-                    console.log("");
 
                     current_point = this.points[visitables[0].id]
                 }
@@ -215,14 +211,13 @@
                 let current = this.points[this.finish_point]
                 this.track = []
                 
+                /* Melacak kembali jalur berdasarkan data 'titik sebelumnya' yang terdapat pada titik terakhir yang dipertimbangkan */
                 while (true) {
                     current.is_in_track = true
                     this.track.push(current)
                     if (current.prev_point == null) { break }
                     current = this.points[current.prev_point]
                 }
-                console.log("Rute (Dihitung mulai dari titik tujuan): ")
-                console.log(this.track.map(point => `"${point.name}"`).join(", "))
 
                 this.track = _.reverse(this.track)
             },
