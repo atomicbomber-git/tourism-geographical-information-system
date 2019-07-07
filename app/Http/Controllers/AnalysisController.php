@@ -9,6 +9,10 @@ class AnalysisController extends Controller
 {
     public function result()
     {
+        /*
+            Melakukan validasi terhadap data input untuk memastikan bahwa semua data tersebut tersedia
+            dalam bentuk bilangan
+        */
         $data = $this->validate(request(), [
             'visitor_count' => 'required|numeric',
             'fee' => 'required|numeric',
@@ -23,7 +27,11 @@ class AnalysisController extends Controller
 
         $aspect_comparisons = collect();
         $aspect_comparison_sums = collect();
-
+        
+        /* 
+            Menghitung rasio nilai aspek di dalam tabel dengan membagi setiap
+            nilai aspek dengan pasangannya
+        */
         foreach ($data as $key_h => $value_h) {
             $aspect_comparisons[$key_h] = collect();
             foreach ($data as $key_r => $value_r) {
@@ -33,13 +41,17 @@ class AnalysisController extends Controller
             }
         }
 
+        /* 
+            Melakukan proses normalisasi nilai aspek dengan menjumlahkan setiap baris
+            dari nilai rasio yang dihitung pada tahap sebelumnya dan kemudain membagi
+            setiap nilai rasio tersebut dengan hasil penjumlahan mereka masing-masing
+        */
         $normalized_aspect_comparisons = $aspect_comparisons
             ->map(function($aspect_comparison) use($aspect_comparison_sums) {
                 return $aspect_comparison->map(function($value, $key) use($aspect_comparison_sums) {
                     return $value / $aspect_comparison_sums[$key];
                 });
             });
-
         $aspect_priorities = $normalized_aspect_comparisons->map(function ($priorities) {
             return $priorities->average();
         });
@@ -50,13 +62,12 @@ class AnalysisController extends Controller
             ->with('site:id,point_id,fee,visitor_count,facility_count')
             ->get()
             ->keyBy('id');
-
         foreach ($points as $point) {
             $point->site["fee_original"] = $point->site["fee"];
             $point->site["fee"] = 1 / ($point->site["fee"] != 0 ? $point->site["fee"] : 1);
         }
 
-        // Calculate local comparisons
+        /* Melakukan perhitungan nilai perbandingan lokal untuk setiap aspek */
         $local_comparisons = collect();
         $local_comparison_sums = collect();
 
@@ -83,7 +94,7 @@ class AnalysisController extends Controller
             $local_comparison_sums->put($aspect_key, $sums);
         }
 
-        // Calculate local priorities
+         /* Melakukan perhitungan nilai prioritas lokal untuk setiap aspek */
         $local_priorities = collect();
         
         foreach ($local_comparisons as $aspect_key => $comparison_list) {
@@ -102,9 +113,8 @@ class AnalysisController extends Controller
             $local_priorities->put($aspect_key, $data);
         }
 
-
+        /* Menggabungkan seluruh data prioritas lokal pada setiap aspek ke dalam satu tabel, dan menghitung nilai akhir */
         $overall_priorities = collect();
-        
         foreach ($points as $point) {
             $record = collect();
             foreach ($aspects as $aspect_key => $aspect_name) {
@@ -116,9 +126,7 @@ class AnalysisController extends Controller
             $record["sum"] = $record->sum();
             $overall_priorities[$point->id] = $record;
         }
-
         $overall_priorities = $overall_priorities->sortByDesc("sum");
-        // return $overall_priorities;
 
         return view(
             'site-analysis.result',
