@@ -7,7 +7,7 @@
                         <i class="fa fa-map"></i>
                         Peta Situs Wisata
                     </div>
-                    
+
                     <div class="card-body">
                         <gmap-map
                             :center="{lat: map_center.lat, lng: map_center.lng}"
@@ -138,8 +138,8 @@
                         ...point,
                         visited: false,  /* Seluruh titik diset menjadi 'belum dikunjungi' */
                         tentative_dist: Infinity, /* Jarak sementara seluruh titik diset menjadi tidak terhingga */
-                        is_in_track: false,
-                        prev_point: null
+                        is_in_track: false, /* Seluruh titik ditandai sebagai titik yang tidak termasuk 'titik jalur' */
+                        prev_point: null /* Titik sebelumnya pada awal mula tidak bernilai apa-apa */
                     }
                 })
 
@@ -153,17 +153,18 @@
                 /* Deskripsi prosedur pengunjungan sebuah titik */
                 let visit = point => {
                     /*
-                        Mengambil data jalur-jalur yang dapat dikunjungi dari titik sekarang
+                        Mengambil data jalur-jalur yang dapat dikunjungi dari titik sekarang /
+                        Mendaftarkan seluruh titik tetangga yang belum dikunjungi
                     */
                     let visitable_paths = point.paths.filter(path => {
                         return !this.points[path.id].visited
                     })
-                    
-                   /* Mengunjungi setiap titik yang terdapat pada ujung jalur */ 
+
+                   /* Mengunjungi setiap titik yang terdapat pada ujung jalur */
                     visitable_paths.forEach(path => {
-                        
-                        let another_point = this.points[path.id]
-                        
+
+                        let another_point = this.points[path.id] /* Another point -> Titik tetangga */
+
                         /* Menghitung jarak titik yang sekarang dengan titik lainnya dengan rumus haversin */
                         const dist = this.haversineDist(
                             point.latitude, point.longitude,
@@ -176,14 +177,14 @@
                             sekarang + panjang jalur
                         */
                         if (point.tentative_dist + dist < another_point.tentative_dist) {
-                            another_point.tentative_dist = point.tentative_dist + dist 
+                            another_point.tentative_dist = point.tentative_dist + dist
 
                             /* Menandai titik sekarang sebagai 'titik sebelumnya' dari titik lainnya */
                             another_point.prev_point = point.id
                         }
 
                     })
-                    
+
                     /* Tandai titik sebagai telah dikunjungi */
                     point.visited = true
                 }
@@ -193,30 +194,31 @@
                     visit(current_point)
 
                     /*
-                        Menentukan titik selanjutnya yang harus dipertimbangkan dari daftar seluruh titik yang belum dikunjungi
+                        Menentukan kandidat titik selanjutnya yang harus dipertimbangkan dari daftar seluruh titik yang belum dikunjungi
                     */
                     let visitables = Object.keys(this.points)
-                        .map(key => { return {id: key, ...this.points[key]} })
-                        .filter(point => !point.visited)
-                        .sort((point_a, point_b) => point_a.tentative_dist - point_b.tentative_dist)
-                    
+                        .map(key => { return {id: key, ...this.points[key]} }) /* Ambil daftar titik */
+                        .filter(point => !point.visited) /* Keluarkan semua titik yang telah dikunjungi dari daftar */
+                        .sort((point_a, point_b) => point_a.tentative_dist - point_b.tentative_dist) /* Urutkan dari titik yang jarak sementaranya terdekat */
+
                     /* Jika tidak ada lagi titik yang dapat dikunjungi, berhenti */
                     if (visitables.length == 0) {
                         break
                     }
 
+                    /* Gunakan titik pertama dari daftar titik-titik kandidat sebagai titik selanjutnya */
                     current_point = this.points[visitables[0].id]
                 }
 
                 let current = this.points[this.finish_point]
                 this.track = []
-                
+
                 /* Melacak kembali jalur berdasarkan data 'titik sebelumnya' yang terdapat pada titik terakhir yang dipertimbangkan */
                 while (true) {
-                    current.is_in_track = true
-                    this.track.push(current)
-                    if (current.prev_point == null) { break }
-                    current = this.points[current.prev_point]
+                    current.is_in_track = true /* Tandai titik terakhir sebagai titik yang ada di dalam jalur */
+                    this.track.push(current) /* Tambahkan titik tsb. sebagai daftar titik dalam jalur */
+                    if (current.prev_point == null) { break } /* Berhenti jika titik tidak memiliki titik sebelumnya */
+                    current = this.points[current.prev_point] /* Set titik sebagai titik sebelumnya */
                 }
 
                 this.track = _.reverse(this.track)
@@ -235,12 +237,12 @@
             haversineDist(lat1,lon1,lat2,lon2) {
                 let R = 6371 // Radius of the earth in km
                 let dLat = this.deg2rad(lat2-lat1)  // deg2rad below
-                let dLon = this.deg2rad(lon2-lon1) 
-                let a = 
+                let dLon = this.deg2rad(lon2-lon1)
+                let a =
                     Math.sin(dLat/2) * Math.sin(dLat/2) +
-                    Math.cos(this.deg2rad(lat1)) * Math.cos(this.deg2rad(lat2)) * 
-                    Math.sin(dLon/2) * Math.sin(dLon/2); 
-                let c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)); 
+                    Math.cos(this.deg2rad(lat1)) * Math.cos(this.deg2rad(lat2)) *
+                    Math.sin(dLon/2) * Math.sin(dLon/2);
+                let c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
                 let d = R * c;
                 return d;
             },
