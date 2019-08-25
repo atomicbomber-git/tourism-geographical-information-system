@@ -137,6 +137,8 @@
                     }
                 })
 
+                this.iteration = 1
+
                 this.dijkstra(this.points[this.start_point], this.points[this.finish_point])
             },
 
@@ -191,6 +193,23 @@
                     point.visited = true
                 }
 
+                let points_array = Object.keys(this.points).map(key => this.points[key])
+                console.log(`Perhitungan Dijkstra untuk Mencari Jalur Terdekat dari Titik ${start.name} dan Titik ${finish.name}`)
+                console.log('Dengan Titik-Titik dan Jalur-Jalur sebagai berikut: \n')
+
+                points_array.forEach(pt => {
+                    console.log(`${pt.name} (Latitude: ${pt.latitude}, Longitude: ${pt.longitude})`)
+                    console.log("Jalur ke titik lain: ")
+                    console.log(
+                        pt.paths
+                            .map(pth => this.points[pth.id].name)
+                            .join(", ")
+                    )
+
+                    console.log("")
+                })
+                console.log()
+
                 while (true) {
                     /* Memulai proses pengunjungan titik */
                     visit(current_point)
@@ -208,8 +227,34 @@
                         break
                     }
 
+                    console.log("Iterasi " + this.iteration);
+                    console.log("Titik yang Belum Dikunjungi: ")
+                    console.log(
+                        points_array
+                            .filter(point => !point.visited)
+                            .map(point => point.name).join(", ")
+                    )
+
+                    console.log("Titik yang Telah Dikunjungi: ")
+                    console.log(
+                        points_array
+                            .filter(point => point.visited)
+                            .map(point => point.name).join(", ")
+                        )
+
+                    console.log("Daftar Jarak Sementara dan Titik Sebelumnya:")
+                    console.log(
+                        points_array
+                            .map(point => `${point.name} -> (${point.tentative_dist == Infinity ? '∞' : point.tentative_dist}, ${point.prev_point ? this.points[point.prev_point].name : '-' })`)
+                            .join("\n")
+                        )
+
+                    console.log("\n")
+
                     /* Gunakan titik pertama dari daftar titik-titik kandidat sebagai titik selanjutnya */
                     current_point = this.points[visitables[0].id]
+
+                    ++this.iteration
                 }
 
                 let current = this.points[this.finish_point]
@@ -221,7 +266,6 @@
                     this.track.push(current) /* Tambahkan titik tsb. sebagai daftar titik dalam jalur */
                     if (current.prev_point == null) { break } /* Berhenti jika titik tidak memiliki titik sebelumnya */
                     current = this.points[current.prev_point] /* Set titik sebagai titik sebelumnya */
-                    console.log(this.track)
                }
 
                 this.track = _.reverse(this.track)
@@ -306,7 +350,9 @@
 
                 start_point: null,
                 finish_point: null,
-                track: []
+                track: [],
+
+                iteration: 1,
             }
         }
     }
