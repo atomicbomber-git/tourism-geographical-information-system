@@ -23,6 +23,7 @@ Vue.component('waypoint-create', require('./components/WaypointCreate.vue'));
 Vue.component('waypoint-edit', require('./components/WaypointEdit.vue'));
 Vue.component('path-create', require('./components/PathCreate.vue'));
 Vue.component('guest-map', require('./components/GuestMap.vue'));
+Vue.component('dijkstra-route', require('./components/DijkstraRoute.vue'));
 
 const app = new Vue({
     el: '#app'

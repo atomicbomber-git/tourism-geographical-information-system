@@ -6,7 +6,7 @@
     * {
         font-size: 0.85rem;
     }
-    
+
     .card {
         margin-bottom: 2rem;
     }
@@ -120,7 +120,7 @@
                     @foreach ($local_comparisons[$aspect_key] as $point_id => $comparisons)
                     <tr>
                         <th class="table-info"> {{ $points[$point_id]->name }} </th>
-                        
+
                         @foreach ($comparisons as $comparison_point_id => $comparison)
                         <th> @number_format($comparison) </th>
                         @endforeach
@@ -149,18 +149,18 @@
                         @foreach($local_priorities[$aspect_key] as $point_id => $comparisons)
                         <th class="table-success"> {{ $points[$point_id]->name }} </th>
                         @endforeach
-                        
+
                         <th class="table-success"> Prioritas </th>
                     </tr>
 
                     @foreach ($local_priorities[$aspect_key] as $point_id => $comparisons)
                     <tr>
                         <th class="table-info"> {{ $points[$point_id]->name }} </th>
-                        
+
                         @foreach ($comparisons as $comparison_point_id => $comparison)
                         <th> @number_format($comparison) </th>
                         @endforeach
-                        
+
                         <th class="table-warning"> @number_format($comparisons->average()) </th>
                     </tr>
                     @endforeach

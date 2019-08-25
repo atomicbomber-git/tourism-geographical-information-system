@@ -15,6 +15,8 @@
 //     return view('welcome');
 // });
 
+use App\Http\Controllers\DijkstraRouteController;
+
 Auth::routes();
 Route::get('/', 'HomeController@index')->name('home');
 
@@ -74,4 +76,9 @@ Route::group(['prefix' => '/slide', 'as' => 'slide.'], function() {
     Route::get('/edit/{slide}', 'SlideController@edit')->name('edit');
     Route::post('/update/{slide}', 'SlideController@update')->name('update');
     Route::get('/image/{slide}', 'SlideController@image')->name('image');
+});
+
+Route::group(['prefix' => '/dijkstra-route', 'as' => 'dijkstra-route.'], function() {
+    Route::get('/create', [DijkstraRouteController::class, 'create'])->name('create');
+    Route::get('/show', [DijkstraRouteController::class, 'show'])->name('show');
 });

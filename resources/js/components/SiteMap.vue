@@ -92,10 +92,8 @@
                 this.map = map
             })
 
-            this.start_point = 1
-            this.finish_point = 6
-
-            this.dijkstra(this.points[this.start_point], this.points[this.end_point])
+            this.start_point = null
+            this.finish_point = null
         },
 
         methods: {
@@ -128,10 +126,6 @@
                     return
                 }
 
-                this.dijkstra(this.points[this.start_point], this.points[this.end_point])
-            },
-
-            dijkstra(start, finish) {
                 /* Mereset ulang semua nilai titik yang ada */
                 this.points = _.mapValues(this.points, point => {
                     return {
@@ -142,6 +136,14 @@
                         prev_point: null /* Titik sebelumnya pada awal mula tidak bernilai apa-apa */
                     }
                 })
+
+                this.dijkstra(this.points[this.start_point], this.points[this.finish_point])
+            },
+
+            dijkstra(start, finish) {
+                if (!start || !finish) {
+                    return
+                }
 
                 /* Set nilai jarak sementara titik awal menjadi 0 */
                 start.tentative_dist = 0
@@ -219,7 +221,8 @@
                     this.track.push(current) /* Tambahkan titik tsb. sebagai daftar titik dalam jalur */
                     if (current.prev_point == null) { break } /* Berhenti jika titik tidak memiliki titik sebelumnya */
                     current = this.points[current.prev_point] /* Set titik sebagai titik sebelumnya */
-                }
+                    console.log(this.track)
+               }
 
                 this.track = _.reverse(this.track)
             },

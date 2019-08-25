@@ -44,7 +44,7 @@ export default {
                 lat: parseFloat(localStorage.gmap_center_lat) || window.gmap_config.map.center.lat,
                 lng: parseFloat(localStorage.gmap_center_lng) || window.gmap_config.map.center.lng
             },
-            
+
             // HTML style
             map_style: window.gmap_config.map.style,
 
