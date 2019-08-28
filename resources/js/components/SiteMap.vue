@@ -58,7 +58,7 @@
                         <div class="form-group">
                             <label> Lokasi Tujuan: </label>
                             <select v-model="finish_point" class="form-control form-control-sm">
-                                <option v-for="point in points" :key="point.id" :value="point.id">
+                                <option v-for="point in site_points" :key="point.id" :value="point.id">
                                     {{ point.name }}
                                 </option>
                             </select>
@@ -94,6 +94,37 @@
 
             this.start_point = null
             this.finish_point = null
+        },
+
+
+        data() {
+            return {
+
+                map_zoom: parseInt(localStorage.gmap_zoom) || 12,
+                map_center: {
+                    lat: parseFloat(localStorage.gmap_center_lat) || 0.8192948,
+                    lng: parseFloat(localStorage.gmap_center_lng) || 109.4806557
+                },
+
+                map_styles: window.gmap_config.map.options.styles,
+
+                points: _.mapValues(window.init_points, point => {
+                    return {
+                        ...point,
+                        // For Dijkstra purpose
+                        visited: false,
+                        tentative_dist: Infinity,
+                        is_in_track: false,
+                        prev_point: null
+                    }
+                }),
+
+                start_point: null,
+                finish_point: null,
+                track: [],
+
+                iteration: 1,
+            }
         },
 
         methods: {
@@ -312,6 +343,16 @@
             },
         },
 
+        computed: {
+            site_points() {
+                return Object.keys(this.points)
+                    .filter(key => {
+                        return this.points[key].type === "SITE"
+                    })
+                    .map(key => this.points[key])
+            }
+        },
+
         watch: {
             start_point: function() {
                 if ((this.start_point != null) && (this.finish_point != null)) {
@@ -325,35 +366,5 @@
                 }
             }
         },
-
-        data() {
-            return {
-
-                map_zoom: parseInt(localStorage.gmap_zoom) || 12,
-                map_center: {
-                    lat: parseFloat(localStorage.gmap_center_lat) || 0.8192948,
-                    lng: parseFloat(localStorage.gmap_center_lng) || 109.4806557
-                },
-
-                map_styles: window.gmap_config.map.options.styles,
-
-                points: _.mapValues(window.init_points, point => {
-                    return {
-                        ...point,
-                        // For Dijkstra purpose
-                        visited: false,
-                        tentative_dist: Infinity,
-                        is_in_track: false,
-                        prev_point: null
-                    }
-                }),
-
-                start_point: null,
-                finish_point: null,
-                track: [],
-
-                iteration: 1,
-            }
-        }
     }
 </script>
