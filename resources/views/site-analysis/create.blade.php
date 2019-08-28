@@ -22,19 +22,15 @@
                             1-10 </strong> untuk kolom-kolom dibawah ini.
                 </div>
 
+                @inject('siteAnalysisPriorityOptions', 'App\Interfaces\SiteAnalysisPriorityOptions')
+
                 <div class='form-group'>
-                    <label for='visitor_count'> Prioritas Aspek J. Pengunjung: </label>
-                
-                    <input
-                        id='visitor_count' name='visitor_count' type='number'
-                        min="1" max="10"
-                        value='{{ old('visitor_count') }}'
-                        placeholder='Prioritas Aspek J. Pengunjung:'
-                        class='form-control {{ !$errors->has('visitor_count') ?: 'is-invalid' }}'>
-
-                    <small class="form-text text-muted"> Nilai melambangkan seberapa tingginya prioritas aspek jumlah pengunjung tahunan ke situs wisata bagi Anda. </small>
-
-                
+                    <label for='visitor_count'> Prioritas Aspek Jumlah Pengunjung: </label>
+                    <select name='visitor_count' id='visitor_count' class='form-control'>
+                        @foreach($siteAnalysisPriorityOptions->visitor_count() as $name => $priority)
+                        <option {{ old('visitor_count') !== $priority ?: 'selected' }} value='{{ $priority }}'> {{ $name }} </option>
+                        @endforeach
+                    </select>
                     <div class='invalid-feedback'>
                         {{ $errors->first('visitor_count') }}
                     </div>
@@ -42,16 +38,11 @@
 
                 <div class='form-group'>
                     <label for='fee'> Prioritas Aspek Harga Tiket Masuk: </label>
-                
-                    <input
-                        id='fee' name='fee' type='number'
-                        min="1" max="10"
-                        placeholder="Prioritas Aspek Harga Tiket Masuk"
-                        value='{{ old('fee') }}'
-                        class='form-control {{ !$errors->has('fee') ?: 'is-invalid' }}'>
-
-                    <small class="form-text text-muted"> Nilai melambangkan seberapa tingginya prioritas aspek murahnya harga tiket masuk ke situs wisata bagi Anda. </small>
-                
+                    <select name='fee' id='fee' class='form-control'>
+                        @foreach($siteAnalysisPriorityOptions->fee() as $name => $priority)
+                        <option {{ old('fee') !== $priority ?: 'selected' }} value='{{ $priority }}'> {{ $name }} </option>
+                        @endforeach
+                    </select>
                     <div class='invalid-feedback'>
                         {{ $errors->first('fee') }}
                     </div>
@@ -59,16 +50,11 @@
 
                 <div class='form-group'>
                     <label for='facility_count'> Prioritas Aspek Jumlah Fasilitas: </label>
-                
-                    <input
-                        id='facility_count' name='facility_count' type='number'
-                        min="1" max="10"
-                        placeholder='Prioritas Aspek Jumlah Fasilitas'
-                        value='{{ old('facility_count') }}'
-                        class='form-control {{ !$errors->has('facility_count') ?: 'is-invalid' }}'>
-
-                    <small class="form-text text-muted"> Nilai melambangkan seberapa tingginya prioritas aspek jumlah fasilitas yang tersedia pada situs wisata bagi Anda. </small>
-                
+                    <select name='facility_count' id='facility_count' class='form-control'>
+                        @foreach($siteAnalysisPriorityOptions->facility_count() as $name => $priority)
+                        <option {{ old('facility_count') !== $priority ?: 'selected' }} value='{{ $priority }}'> {{ $name }} </option>
+                        @endforeach
+                    </select>
                     <div class='invalid-feedback'>
                         {{ $errors->first('facility_count') }}
                     </div>
