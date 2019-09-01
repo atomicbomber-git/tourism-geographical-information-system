@@ -3,6 +3,7 @@ require('./bootstrap');
 window.Vue = require('vue');
 
 import * as VueGoogleMaps from 'vue2-google-maps'
+import VModal from 'vue-js-modal'
 import vSelect from 'vue-select'
 
 
@@ -14,6 +15,7 @@ Vue.use(VueGoogleMaps, {
     },
 })
 
+Vue.use(VModal)
 Vue.component('v-select', vSelect)
 Vue.component('home', require('./components/Home.vue'));
 Vue.component('site-create', require('./components/SiteCreate.vue'));

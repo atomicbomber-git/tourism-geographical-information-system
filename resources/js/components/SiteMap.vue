@@ -81,10 +81,35 @@
                 </div>
             </div>
         </div>
+
+        <modal name="site-detail" height="auto">
+            <div class="p-4" v-if="selected_point">
+                <h1 class="h2 mb-3">
+                    {{ selected_point.name }}
+                </h1>
+
+                <dl>
+                    <dt> Jumlah Pengunjung </dt>
+                    <dd> {{ number_format(selected_point.site.visitor_count) }} </dd>
+
+                    <dt> Harga Tiket Masuk </dt>
+                    <dd> {{ number_format(selected_point.site.fee) }} </dd>
+
+                    <dt> Jumlah Fasilitas </dt>
+                    <dd> {{ number_format(selected_point.site.facility_count) }} </dd>
+                </dl>
+
+                <p>
+                    {{ selected_point.site.description }}
+                </p>
+            </div>
+        </modal>
     </div>
 </template>
 
 <script>
+    import { number_format } from '../numeral_helpers'
+
     export default {
         mounted() {
             // Store map object ref
@@ -124,11 +149,24 @@
                 track: [],
 
                 iteration: 1,
+                selected_point: null,
             }
         },
 
         methods: {
+            number_format,
+
+            showSiteDetailModal(point) {
+                console.log(point)
+                this.selected_point = point
+                this.$modal.show("site-detail")
+            },
+
             onPointMarkerClick(point) {
+                if (point.type === "SITE") {
+                    this.showSiteDetailModal(point)
+                }
+
                 if (this.start_point == null) {
                     this.start_point = point.id
                 }
@@ -227,6 +265,7 @@
                 let points_array = Object.keys(this.points).map(key => this.points[key])
                 console.log(`Perhitungan Dijkstra untuk Mencari Jalur Terdekat dari Titik ${start.name} dan Titik ${finish.name}`)
                 console.log('Dengan Titik-Titik dan Jalur-Jalur sebagai berikut: \n')
+                let report_table = {}
 
                 points_array.forEach(pt => {
                     console.log(`${pt.name} (Latitude: ${pt.latitude}, Longitude: ${pt.longitude})`)
@@ -274,6 +313,10 @@
                         )
 
                     console.log("Daftar Jarak Sementara dan Titik Sebelumnya:")
+
+                    let text_array = points_array
+                        .map(point => `${point.name} -> (${point.tentative_dist == Infinity ? '∞' : point.tentative_dist}, ${point.prev_point ? this.points[point.prev_point].name : '-' })`)
+
                     console.log(
                         points_array
                             .map(point => `${point.name} -> (${point.tentative_dist == Infinity ? '∞' : point.tentative_dist}, ${point.prev_point ? this.points[point.prev_point].name : '-' })`)
@@ -290,6 +333,19 @@
 
                 let current = this.points[this.finish_point]
                 this.track = []
+
+
+                console.log(`Dengan hasil kalkulasi diatas dapat disimpulkan bahwa jalur terdekat dari titik ${start.name} ke titik ${finish.name} adalah:`)
+                let temp = current
+                let route = []
+                while(true) {
+                    route.push(temp.name)
+                    if (temp.prev_point == null) {
+                        break
+                    }
+                    temp = this.points[temp.prev_point]
+                }
+                console.log(route.reverse().join(" - ")  )
 
                 /* Melacak kembali jalur berdasarkan data 'titik sebelumnya' yang terdapat pada titik terakhir yang dipertimbangkan */
                 while (true) {

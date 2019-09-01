@@ -45,7 +45,7 @@ class SiteController extends Controller
             ->with('paths_from:point_a_id,point_b_id')
             ->get()
             ->keyBy('id');
-        
+
         $categories = SiteCategory::select('id', 'name')
             ->get();
 
@@ -69,7 +69,7 @@ class SiteController extends Controller
             ->with('paths_from:point_a_id,point_b_id')
             ->get()
             ->keyBy('id');
-        
+
         $categories = SiteCategory::select('id', 'name')
             ->get();
 
@@ -186,9 +186,10 @@ class SiteController extends Controller
             ->select('id', 'name', 'latitude', 'longitude', 'type')
             ->with('paths_to:point_a_id,point_b_id')
             ->with('paths_from:point_a_id,point_b_id')
+            ->with('site')
             ->get()
             ->map(function ($point) {
-                
+
                 $point->paths = collect([]);
 
                 $point->paths_to->each(function ($path) use($point) {
