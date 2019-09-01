@@ -19,6 +19,7 @@ class HomeController extends Controller
         $points = Point::query()
             ->select('id', 'name', 'latitude', 'longitude', 'type')
             ->with('paths_from:point_a_id,point_b_id')
+            ->with('site')
             ->get()
             ->keyBy('id');
 

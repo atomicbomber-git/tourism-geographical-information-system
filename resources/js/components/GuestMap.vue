@@ -1,34 +1,46 @@
 <template>
-    <gmap-map
-        :zoom="map_zoom"
-        :center="map_center"
-        :options="{ styles: map_styles }"
-        :style="{'padding-top': '100%', 'width': '100%', 'border': 'thin solid black'}"
-        @zoom_changed="zoomChanged"
-        @center_changed="centerChanged"
-        @click="mapClicked"
-        ref="map">
+    <div>
+        <gmap-map
+            :zoom="map_zoom"
+            :center="map_center"
+            :options="{ styles: map_styles }"
+            :style="{'padding-top': '100%', 'width': '100%', 'border': 'thin solid black'}"
+            @zoom_changed="zoomChanged"
+            @center_changed="centerChanged"
+            @click="mapClicked"
+            ref="map">
 
-        <div v-for="point in points"
-            :key="point.id">
-            <gmap-marker
-                :label="markerLabel(point)"
-                :position="{ lat: point.latitude, lng: point.longitude }"
-                :icon="markerIcon(point)"/>
+            <div v-for="point in points"
+                :key="point.id">
+                <gmap-marker
+                    @click="onMarkerClick(point)"
+                    :label="markerLabel(point)"
+                    :position="{ lat: point.latitude, lng: point.longitude }"
+                    :icon="markerIcon(point)"/>
 
-            <gmap-polyline
-                v-for="path in point.paths_from"
-                :key="path.point_b_id"
-                :path="[{lat: point.latitude, lng: point.longitude}, {lat: points[path.point_b_id].latitude, lng: points[path.point_b_id].longitude }]"/>
-        </div>
+                <gmap-polyline
+                    v-for="path in point.paths_from"
+                    :key="path.point_b_id"
+                    :path="[{lat: point.latitude, lng: point.longitude}, {lat: points[path.point_b_id].latitude, lng: points[path.point_b_id].longitude }]"/>
+            </div>
+        </gmap-map>
 
-    </gmap-map>
+        <SiteDetailModal
+            name="site-detail"
+            :selected_point="selected_point"
+            :onClose="onCloseSiteDetailModalButtonClick"
+        >
+        </SiteDetailModal>
+    </div>
 </template>
 
 <script>
-import {get} from 'lodash'
+
+import { get } from 'lodash'
+import SiteDetailModal from './SiteDetailModal'
 
 export default {
+    components: { SiteDetailModal },
 
     mounted() {
         this.$refs.map.$mapPromise.then(map => {
@@ -55,13 +67,27 @@ export default {
             marker_position: {
                 lat: parseFloat(localStorage.gmap_center_lat) || window.gmap_config.map.center.lat,
                 lng: parseFloat(localStorage.gmap_center_lng) || window.gmap_config.map.center.lng
-            }
+            },
+
+            selected_point: null,
         }
     },
 
     methods: {
         get: get,
         getTime() { return (new Date).getTime() },
+
+        onMarkerClick(point) {
+            if (point.type === "SITE") {
+                this.selected_point = point
+                this.$modal.show("site-detail")
+            }
+        },
+
+        onCloseSiteDetailModalButtonClick() {
+            this.selected_point = null
+            this.$modal.hide("site-detail")
+        },
 
         zoomChanged() {
             window.localStorage.setItem(window.gmap_config.localstorage_keys.zoom, this.map.getZoom())

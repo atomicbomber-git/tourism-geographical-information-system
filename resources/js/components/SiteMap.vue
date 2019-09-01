@@ -82,35 +82,22 @@
             </div>
         </div>
 
-        <modal name="site-detail" height="auto">
-            <div class="p-4" v-if="selected_point">
-                <h1 class="h2 mb-3">
-                    {{ selected_point.name }}
-                </h1>
-
-                <dl>
-                    <dt> Jumlah Pengunjung </dt>
-                    <dd> {{ number_format(selected_point.site.visitor_count) }} </dd>
-
-                    <dt> Harga Tiket Masuk </dt>
-                    <dd> {{ number_format(selected_point.site.fee) }} </dd>
-
-                    <dt> Jumlah Fasilitas </dt>
-                    <dd> {{ number_format(selected_point.site.facility_count) }} </dd>
-                </dl>
-
-                <p>
-                    {{ selected_point.site.description }}
-                </p>
-            </div>
-        </modal>
+        <SiteDetailModal
+            name="site-detail"
+            :selected_point="selected_point"
+            :onClose="onCloseSiteDetailModalButtonClick"
+        >
+        </SiteDetailModal>
     </div>
 </template>
 
 <script>
+    import SiteDetailModal from './SiteDetailModal'
     import { number_format } from '../numeral_helpers'
 
     export default {
+        components: { SiteDetailModal },
+
         mounted() {
             // Store map object ref
             this.$refs.map.$mapPromise.then(map => {
@@ -157,9 +144,13 @@
             number_format,
 
             showSiteDetailModal(point) {
-                console.log(point)
                 this.selected_point = point
                 this.$modal.show("site-detail")
+            },
+
+            onCloseSiteDetailModalButtonClick() {
+                this.selected_point = null
+                this.$modal.hide("site-detail")
             },
 
             onPointMarkerClick(point) {
