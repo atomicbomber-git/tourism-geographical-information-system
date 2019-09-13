@@ -13,7 +13,7 @@
                             :center="{lat: map_center.lat, lng: map_center.lng}"
                             :zoom="map_zoom"
                             :options="{ styles: map_styles }"
-                            @zoom_changed="saveZoom"
+                            @zoom_changed="onZoomChanged"
                             @center_changed="saveCenter"
                             ref="map"
                             style="width: 100%; height: 640px">
@@ -22,6 +22,7 @@
                                 v-for="point in points"
                                 :key="point.id">
                                 <GmapMarker
+                                    v-if="showMarker(point)"
                                     @click="onPointMarkerClick(point)"
                                     :position="{lat: point.latitude, lng: point.longitude}"
                                     :label="markerLabel(point)"
@@ -30,6 +31,7 @@
                                 </GmapMarker>
 
                                 <gmap-polyline
+                                    v-show="showMarker(point)"
                                     v-for="path in point.paths"
                                     :key="path.id"
                                     :path="[{lat: point.latitude, lng: point.longitude}, {lat: points[path.id].latitude, lng: points[path.id].longitude}]"
@@ -102,6 +104,10 @@
             // Store map object ref
             this.$refs.map.$mapPromise.then(map => {
                 this.map = map
+
+                this.map.addListener("bounds_changed", () => {
+                    this.map_bounds = map.getBounds()
+                })
             })
 
             this.start_point = null
@@ -111,7 +117,7 @@
 
         data() {
             return {
-
+                map_bounds: null,
                 map_zoom: parseInt(localStorage.gmap_zoom) || 12,
                 map_center: {
                     lat: parseFloat(localStorage.gmap_center_lat) || 0.8192948,
@@ -137,11 +143,23 @@
 
                 iteration: 1,
                 selected_point: null,
+
             }
         },
 
         methods: {
             number_format,
+
+            showMarker(point) {
+                if (this.map_bounds === null) {
+                    return false
+                }
+
+                return (
+                    ((point.latitude >=  this.map_bounds.na.g) && (point.latitude <= this.map_bounds.na.h)) &&
+                    ((point.longitude >= this.map_bounds.ja.g) && (point.longitude <= this.map_bounds.ja.h))
+                )
+            },
 
             showSiteDetailModal(point) {
                 this.selected_point = point
@@ -171,6 +189,11 @@
                 }
             },
 
+            onZoomChanged(e) {
+                this.map_zoom = e
+                this.saveZoom()
+            },
+
             saveZoom() {
                 window.localStorage.setItem('gmap_zoom', this.map.getZoom())
             },
@@ -198,7 +221,6 @@
                 })
 
                 this.iteration = 1
-
                 this.dijkstra(this.points[this.start_point], this.points[this.finish_point])
             },
 
@@ -254,22 +276,22 @@
                 }
 
                 let points_array = Object.keys(this.points).map(key => this.points[key])
-                console.log(`Perhitungan Dijkstra untuk Mencari Jalur Terdekat dari Titik ${start.name} dan Titik ${finish.name}`)
-                console.log('Dengan Titik-Titik dan Jalur-Jalur sebagai berikut: \n')
+                this.log(`Perhitungan Dijkstra untuk Mencari Jalur Terdekat dari Titik ${start.name} dan Titik ${finish.name}`)
+                this.log('Dengan Titik-Titik dan Jalur-Jalur sebagai berikut: \n')
                 let report_table = {}
 
                 points_array.forEach(pt => {
-                    console.log(`${pt.name} (Latitude: ${pt.latitude}, Longitude: ${pt.longitude})`)
-                    console.log("Jalur ke titik lain: ")
-                    console.log(
+                    this.log(`${pt.name} (Latitude: ${pt.latitude}, Longitude: ${pt.longitude})`)
+                    this.log("Jalur ke titik lain: ")
+                    this.log(
                         pt.paths
                             .map(pth => this.points[pth.id].name)
                             .join(", ")
                     )
 
-                    console.log("")
+                    this.log("")
                 })
-                console.log()
+                this.log()
 
                 while (true) {
                     /* Memulai proses pengunjungan titik */
@@ -288,33 +310,33 @@
                         break
                     }
 
-                    console.log("Iterasi " + this.iteration);
-                    console.log("Titik yang Belum Dikunjungi: ")
-                    console.log(
+                    this.log("Iterasi " + this.iteration);
+                    this.log("Titik yang Belum Dikunjungi: ")
+                    this.log(
                         points_array
                             .filter(point => !point.visited)
                             .map(point => point.name).join(", ")
                     )
 
-                    console.log("Titik yang Telah Dikunjungi: ")
-                    console.log(
+                    this.log("Titik yang Telah Dikunjungi: ")
+                    this.log(
                         points_array
                             .filter(point => point.visited)
                             .map(point => point.name).join(", ")
                         )
 
-                    console.log("Daftar Jarak Sementara dan Titik Sebelumnya:")
+                    this.log("Daftar Jarak Sementara dan Titik Sebelumnya:")
 
                     let text_array = points_array
                         .map(point => `${point.name} -> (${point.tentative_dist == Infinity ? '∞' : point.tentative_dist}, ${point.prev_point ? this.points[point.prev_point].name : '-' })`)
 
-                    console.log(
+                    this.log(
                         points_array
                             .map(point => `${point.name} -> (${point.tentative_dist == Infinity ? '∞' : point.tentative_dist}, ${point.prev_point ? this.points[point.prev_point].name : '-' })`)
                             .join("\n")
                         )
 
-                    console.log("\n")
+                    this.log("\n")
 
                     /* Gunakan titik pertama dari daftar titik-titik kandidat sebagai titik selanjutnya */
                     current_point = this.points[visitables[0].id]
@@ -326,7 +348,7 @@
                 this.track = []
 
 
-                console.log(`Dengan hasil kalkulasi diatas dapat disimpulkan bahwa jalur terdekat dari titik ${start.name} ke titik ${finish.name} adalah:`)
+                this.log(`Dengan hasil kalkulasi diatas dapat disimpulkan bahwa jalur terdekat dari titik ${start.name} ke titik ${finish.name} adalah:`)
                 let temp = current
                 let route = []
                 while(true) {
@@ -336,9 +358,14 @@
                     }
                     temp = this.points[temp.prev_point]
                 }
-                console.log(route.reverse().join(" - ")  )
+                this.log(route.reverse().join(" - ")  )
 
                 /* Melacak kembali jalur berdasarkan data 'titik sebelumnya' yang terdapat pada titik terakhir yang dipertimbangkan */
+
+                if (current.prev_point === null) { // Jika titik terakhir tidak memiliki titik sebelumnya (artinya jalur tidak ditemukan)
+                    alert("Jalur tidak ditemukan.")
+                }
+
                 while (true) {
                     current.is_in_track = true /* Tandai titik terakhir sebagai titik yang ada di dalam jalur */
                     this.track.push(current) /* Tambahkan titik tsb. sebagai daftar titik dalam jalur */
@@ -386,8 +413,25 @@
             },
 
             markerLabel(point) {
-                return { text: point.name, ...window.gmap_config.marker.label }
+                const label = {
+                    text: point.name,
+                    ...window.gmap_config.marker.label
+                }
+
+                if ((point.type == 'WAYPOINT') && (this.map_zoom >= 15)) {
+                    return label
+                }
+                else if (point.type == 'SITE') {
+                    return label
+                }
+                else {
+                    return null
+                }
             },
+
+            log(value) {
+
+            }
         },
 
         computed: {
