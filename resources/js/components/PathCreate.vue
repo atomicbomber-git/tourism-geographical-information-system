@@ -18,17 +18,20 @@
                             :options="{ styles: this.styles }" >
 
                             <div v-for="point in points" :key="point.id" >
-                                <gmap-marker
-                                    :position="{lat: point.latitude, lng: point.longitude}"
-                                    @click="markerClick(point)"
-                                    :label="{ text: point.name, fontSize: '14pt', fontWeight: 'bold', color: 'black'}"
-                                    :icon="markerIcon(point)"
-                                    />
-                                <gmap-polyline
-                                    v-for="path in point.paths_from"
-                                    :key="path.point_b_id"
-                                    :path="[{lat: point.latitude, lng: point.longitude}, {lat: points[path.point_b_id].latitude, lng: points[path.point_b_id].longitude }]"
-                                    />
+                                <template v-if="showMarker(point)">
+                                    <gmap-marker
+                                        :position="{lat: point.latitude, lng: point.longitude}"
+                                        @click="markerClick(point)"
+                                        :label="markerLabel(point)"
+                                        :icon="markerIcon(point)"
+                                        />
+
+                                    <gmap-polyline
+                                        v-for="path in point.paths_from"
+                                        :key="path.point_b_id"
+                                        :path="[{lat: point.latitude, lng: point.longitude}, {lat: points[path.point_b_id].latitude, lng: points[path.point_b_id].longitude }]"
+                                        />
+                                </template>
                             </div>
 
                             <gmap-polyline
@@ -74,22 +77,28 @@
                         </form>
                     </div>
                 </div>
-
             </div>
         </div>
     </div>
 </template>
 
 <script>
+    import { debounce } from 'lodash'
+
     export default {
         mounted() {
             this.$refs.map.$mapPromise.then(map => {
                 this.map = map
+
+                this.map.addListener("bounds_changed", debounce(() => {
+                    this.mapBounds = this.map.getBounds()
+                }, 500))
             })
         },
 
         data() {
             return {
+                mapBounds: null,
                 mapZoom: parseInt(localStorage.gmap_zoom) || 12,
                 mapCenter: {
                     lat: parseFloat(localStorage.gmap_center_lat) || 0.8192948,
@@ -145,10 +154,44 @@
                     return '/png/marker_lime.png'
                 }
 
-                return '/png/marker_blue.png'
+                switch (point.type) {
+                    case 'WAYPOINT':
+                        return window.gmap_config.marker.icons.default;
+                    case 'SITE':
+                        return window.gmap_config.marker.icons.site;
+                }
             },
 
-            saveZoom() {
+            markerLabel(point) {
+                const label = {
+                    text: point.name,
+                    ...window.gmap_config.marker.label
+                }
+
+                if ((point.type == 'WAYPOINT') && (this.mapZoom >= 12)) {
+                    return label
+                }
+                else if (point.type == 'SITE') {
+                    return label
+                }
+                else {
+                    return null
+                }
+            },
+
+            showMarker(point) {
+                if (this.mapBounds === null) {
+                    return false
+                }
+
+                return (
+                    ((point.latitude >=  this.mapBounds.na.g) && (point.latitude <= this.mapBounds.na.h)) &&
+                    ((point.longitude >= this.mapBounds.ja.g) && (point.longitude <= this.mapBounds.ja.h))
+                )
+            },
+
+            saveZoom(zoom) {
+                this.mapZoom = zoom
                 window.localStorage.setItem('gmap_zoom', this.map.getZoom())
             },
 

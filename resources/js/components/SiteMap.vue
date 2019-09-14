@@ -418,7 +418,7 @@
                     ...window.gmap_config.marker.label
                 }
 
-                if ((point.type == 'WAYPOINT') && (this.map_zoom >= 15)) {
+                if ((point.type == 'WAYPOINT') && (this.map_zoom >= 12)) {
                     return label
                 }
                 else if (point.type == 'SITE') {

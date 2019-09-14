@@ -21,7 +21,7 @@ class PathController extends Controller
     public function create()
     {
         $points = Point::query()
-            ->select('id', 'latitude', 'longitude', 'name')
+            ->select('id', 'latitude', 'longitude', 'name', 'type')
             ->with('paths_from:point_a_id,point_b_id', 'paths_to:point_a_id,point_b_id')
             ->get()
             ->keyBy('id');

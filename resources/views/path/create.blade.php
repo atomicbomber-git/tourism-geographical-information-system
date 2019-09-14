@@ -13,6 +13,7 @@
 </div>
 
 @javascript('gmap_styles', config('gmap_style'))
+@javascript('gmap_config', config('gmap_config'))
 @javascript('init_points', $points)
 @javascript('gmap_zoom', session('gmap_zoom') ?? 11)
 
