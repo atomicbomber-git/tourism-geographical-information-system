@@ -16,12 +16,6 @@
            <form action="{{ route('site-analysis.result') }}" method="POST">
                @csrf
 
-                <div class="alert alert-info">
-                    <i class="fa fa-info"></i>
-                    Mohon masukkan nilai dengan rentang <strong>
-                            1-10 </strong> untuk kolom-kolom dibawah ini.
-                </div>
-
                 @inject('siteAnalysisPriorityOptions', 'App\Interfaces\SiteAnalysisPriorityOptions')
 
                 <div class='form-group'>
